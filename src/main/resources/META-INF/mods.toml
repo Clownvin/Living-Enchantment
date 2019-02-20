@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[24,]"
+issueTrackerURL="https://github.com/Clownvin/Living-Enchantment/issues"
+displayURL="https://minecraft.curseforge.com/projects/living-enchantment"
+logoFile="logo.png"
+
+[[mods]]
+    modId="livingenchantment"
+    version="${file.jarVersion}"
+    displayName="Living Enchantment"
+    credits="Clownvin"
+    authors="Clownvin"
+    description='''
+    A small and concise mod that adds living weapons and tools through an enchantment. Lots of config options.
+    '''

@@ -1,0 +1,14 @@
+{
+  "pools": [
+    {
+      "name": "empty_loot",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "empty",
+          "weight": 100
+        }
+      ]
+    }
+  ]
+}
