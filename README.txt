@@ -1,62 +1,25 @@
--------------------------------------------
-Source installation information for modders
--------------------------------------------
-This code follows the Minecraft Forge installation methodology. It will apply
-some small patches to the vanilla MCP source code, giving you and it access 
-to some of the data and functions you need to build a successful mod.
+This mod adds living weapons, tools, and armor through the use of a new enchantment, Living! Living lets your equipment grow stronger over time, and even have their own personalities! This mod is HIGHLY configurable, with many config options to choose from (although I've designed the defaults to be as balanced for vanilla gameplay as I can)
 
-Note also that the patches are built against "unrenamed" MCP source code (aka
-srgnames) - this means that you will not be able to read them directly against
-normal code.
+Each enchanted item gains experience through use. There are 3 different types of ways for items to gain XP in this mod for you to chose from.
 
-Source pack installation information:
+   Mending-Style: Living items will consume some of your XP to level up, similar to how mending works.
+   Original: Living items gain XP instantly when killing a Mob or breaking a block (tools only)
+   Original with XP orbs: Similar to original, except instead of instantly adding XP, it spawns an XP orb (orb only works with living items, it is not a normal XP orb)
+ 
+Each level increases the damage and effectiveness of the weapon by a set amount, 5% by default. For armor, the level of all pieces worn is added up, then the damage is divided by 1 + (0.05 * combined level). You can change a lot about the leveling process and other rates in mod config, which you can find in the mod settings or you can edit the config file in the config folder inside %appdata%/.minecraft.
 
-Standalone source installation
-==============================
+So how do you obtain the enchantment in survival? By default, you can get the enchantment book or a unique enchanted item from fishing (1 in 1000 default) or from any spawned chest (1 in 9 default). Villagers should also be able to sell them. Of course, if you're in creative you can just find the book in the Tools tab.
 
-See the Forge Documentation online for more detailed instructions:
-http://mcforge.readthedocs.io/en/latest/gettingstarted/
+Because this enchantment is so strong (depending on how much you use the item), it is incompatible with all other damage or efficiency enchantments by default. Which is fine, you'll be able to outperform them if you put the time in. You can also enable other damage enchantments if you want, you cheeky dog. Protection is disabled by default for living armor too.
 
-Step 1: Open your command-line and browse to the folder where you extracted the zip file.
+Enchantments also come with a personality. Each living item will respond to certain events in a way you might expect a person with that personality to respond! You can create your own personalities or edit existing ones in the %appdata%/.minecraft/config/personalities folder.
 
-Step 2: Once you have a command window up in the folder that the downloaded material was placed, type:
+As far as compatibility with items other mods, this enchantment should work with any item from any mod, as long as the item returns a proper tool class Set (which most will). There is also an Enchanter recipe for this enchantment for the EnderIO mod.
 
-Windows: "gradlew setupDecompWorkspace"
-Linux/Mac OS: "./gradlew setupDecompWorkspace"
+This mod also contains a few commands, if you need/want to use them. All these commands require you to hold an item enchanted with Living in your mainhand, and will affect that item.
 
-Step 3: After all that finished, you're left with a choice.
-For eclipse, run "gradlew eclipse" (./gradlew eclipse if you are on Mac/Linux)
-
-If you prefer to use IntelliJ, steps are a little different.
-1. Open IDEA, and import project.
-2. Select your build.gradle file and have it import.
-3. Once it's finished you must close IntelliJ and run the following command:
-
-"gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
-
-Step 4: The final step is to open Eclipse and switch your workspace to /eclipse/ (if you use IDEA, it should automatically start on your project)
-
-If at any point you are missing libraries in your IDE, or you've run into problems you can run "gradlew --refresh-dependencies" to refresh the local cache. "gradlew clean" to reset everything {this does not affect your code} and then start the processs again.
-
-Should it still not work, 
-Refer to #ForgeGradle on EsperNet for more information about the gradle environment.
-
-Tip:
-If you do not care about seeing Minecraft's source code you can replace "setupDecompWorkspace" with one of the following:
-"setupDevWorkspace": Will patch, deobfuscate, and gather required assets to run minecraft, but will not generate human readable source code.
-"setupCIWorkspace": Same as Dev but will not download any assets. This is useful in build servers as it is the fastest because it does the least work.
-
-Tip:
-When using Decomp workspace, the Minecraft source code is NOT added to your workspace in a editable way. Minecraft is treated like a normal Library. Sources are there for documentation and research purposes and usually can be accessed under the 'referenced libraries' section of your IDE.
-
-Forge source installation
-=========================
-MinecraftForge ships with this code and installs it as part of the forge
-installation process, no further action is required on your part.
-
-LexManos' Install Video
-=======================
-https://www.youtube.com/watch?v=8VEdtQLuLO0&feature=youtu.be
-
-For more details update more often refer to the Forge Forums:
-http://www.minecraftforge.net/forum/index.php/topic,14048.0.html
+   additemxp <xp>  -  Adds xp to the item held in your main hand.
+   setitemxp <xp>  -  Sets the xp of the item held in your main hand.
+   setitemlevel <level>  -  Sets the level of the item held in your main hand.
+   setpersonality [personality]  -  Sets the personality of the item held in your main hand. If you opt to leave personality blank (no arguments), then the command will list all available personalities instead.
+   resetitem  -  Resets EVERYTHING for the item (level, xp, personality, all the counts)
