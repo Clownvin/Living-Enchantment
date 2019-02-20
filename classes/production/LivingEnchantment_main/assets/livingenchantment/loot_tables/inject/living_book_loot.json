@@ -1,0 +1,20 @@
+{
+  "pools": [
+    {
+      "name": "living_book_loot",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:book",
+          "weight": 100,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

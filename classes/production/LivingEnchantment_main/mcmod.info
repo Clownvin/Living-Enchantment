@@ -1,0 +1,16 @@
+[
+{
+  "modid": "livingenchantment",
+  "name": "Living Enchantment",
+  "description": "A small and concise mod that adds living weapons and tools through an enchantment.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://minecraft.curseforge.com/projects/living-enchantment",
+  "updateUrl": "",
+  "authorList": ["Clownvin"],
+  "credits": "Clownvin",
+  "logoFile": "logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
