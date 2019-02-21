@@ -10,6 +10,8 @@ import com.clownvin.livingenchantment.world.storage.loot.functions.EnchantLiving
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandSource;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -18,11 +20,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -31,7 +35,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.*;
@@ -43,11 +50,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Mod(LivingEnchantment.MODID)
 @Mod.EventBusSubscriber(modid = LivingEnchantment.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -465,12 +474,19 @@ public class LivingEnchantment {
 
     }
 
-    @SubscribeEvent
-    public static void onAnvilRepair(AnvilRepairEvent event) {
-        NBTTagCompound outputTag = getEnchantmentNBTTag(event.getItemResult());
-        NBTTagCompound inputTag = getEnchantmentNBTTag(event.getItemInput());
-        if (outputTag == null || inputTag == null)
+    //@SubscribeEvent
+    public static void onAnvilUpdate(AnvilUpdateEvent event) {
+        LOGGER.info("On Anvil Update!");
+        NBTTagCompound inputTag = getEnchantmentNBTTag(event.getLeft());
+        //NBTTagCompound tag = getEnchantmentNBTTag(event.get)
+        LOGGER.info(inputTag);
+        if (inputTag == null)
             return;
+        ItemStack output = event.getLeft().copy();
+        LOGGER.info("Input:\n"+event.getLeft().getItem().getRegistryName()+"\n"+inputTag);
+        //LOGGER.info("Output pre:\n"+event.getOutput().getItem().getRegistryName()+"\n"+outputTag);
+        //Tuple<Tuple<Integer, Integer>, String> data = anvilUpdate(event.getLeft(), event.getRight(), output, event.getCost(), event.getMaterialCost(), event.getName());
+        NBTTagCompound outputTag = getEnchantmentNBTTag(output);
         outputTag.setDouble(XP, inputTag.getDouble(XP));
         outputTag.setInt(LEVEL, xpToLvl(outputTag.getDouble(XP)));
         outputTag.setFloat(EFFECTIVENESS, getWeaponEffectivenessModifier(outputTag));
@@ -479,6 +495,31 @@ public class LivingEnchantment {
         outputTag.setInt(KILL_COUNT, inputTag.getInt(KILL_COUNT));
         outputTag.setInt(HIT_COUNT, inputTag.getInt(HIT_COUNT));
         outputTag.setInt(USAGE_COUNT, inputTag.getInt(USAGE_COUNT));
+        //output.setDisplayName(new TextComponentString(data.getB()));
+        LOGGER.info("Output:\n"+event.getOutput().getItem().getRegistryName()+"\n"+outputTag);
+        event.setOutput(output);
+        //event.setCost(data.getA().getA());
+        //event.setMaterialCost(data.getA().getB());
+    }
+
+    @SubscribeEvent
+    public static void onAnvilRepair(AnvilRepairEvent event) {
+        LOGGER.debug("On Anvil Repair!");
+        NBTTagCompound outputTag = getEnchantmentNBTTag(event.getItemResult());
+        NBTTagCompound inputTag = getEnchantmentNBTTag(event.getItemInput());
+        if (outputTag == null || inputTag == null)
+            return;
+        LOGGER.debug("Input:\n"+event.getItemInput().getItem().getRegistryName()+"\n"+inputTag);
+        LOGGER.debug("Output pre:\n"+event.getItemResult().getItem().getRegistryName()+"\n"+outputTag);
+        outputTag.setDouble(XP, inputTag.getDouble(XP));
+        outputTag.setInt(LEVEL, xpToLvl(outputTag.getDouble(XP)));
+        outputTag.setFloat(EFFECTIVENESS, getWeaponEffectivenessModifier(outputTag));
+        outputTag.setFloat(PERSONALITY, inputTag.getFloat(PERSONALITY));
+        outputTag.setString(PERSONALITY_NAME, Personality.getPersonality(inputTag).name);
+        outputTag.setInt(KILL_COUNT, inputTag.getInt(KILL_COUNT));
+        outputTag.setInt(HIT_COUNT, inputTag.getInt(HIT_COUNT));
+        outputTag.setInt(USAGE_COUNT, inputTag.getInt(USAGE_COUNT));
+        LOGGER.debug("Output post:\n"+event.getItemResult().getItem().getRegistryName()+"\n"+outputTag);
     }
 
     @SubscribeEvent
@@ -499,14 +540,35 @@ public class LivingEnchantment {
         doTalking(player, heldItem, tag, event);
     }
 
+    public static boolean isToolEffective(ItemStack stack, IBlockState state) {
+        Material material = state.getMaterial();
+        if (stack.getToolTypes().parallelStream().anyMatch((type) -> typeMatchesMaterial(type, material))) {
+            return true;
+        }
+        return stack.getItem().getToolTypes(stack).stream().anyMatch(e -> {LOGGER.debug(state.getBlock().getRegistryName()+", "+e.getName()+", "+state.isToolEffective(e)+", "+state.getHarvestTool()); return state.isToolEffective(e);});
+    }
+
+    public static boolean typeMatchesMaterial(ToolType type, Material material) {
+        if (type == ToolType.PICKAXE) {
+            return material == Material.ROCK || material == Material.IRON || material == Material.ANVIL;
+        }
+        if (type == ToolType.AXE) {
+            return material == Material.WOOD || material == Material.PLANTS || material == Material.VINE;
+        }
+        if (type == ToolType.SHOVEL) {
+            return material == Material.GROUND || material == Material.SAND || material == Material.GRASS || material == Material.SNOW || material == Material.CLAY || material == Material.CRAFTED_SNOW;
+        }
+        return false;
+    }
+
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (event.getWorld().isRemote())
             return;
         EntityPlayer player = event.getPlayer();
-        if (event.getState().getBlockHardness(event.getWorld(), event.getPos()) <= 0 || (Config.COMMON.checkCanHarvest.get() && !player.canHarvestBlock(event.getState())))
-            return;
         ItemStack heldItem = player.getHeldItemMainhand();
+        if (event.getState().getBlockHardness(event.getWorld(), event.getPos()) <= 0 || (Config.COMMON.checkIsToolEffective.get() && !isToolEffective(heldItem, event.getState())))
+            return;
         NBTTagCompound tag = getEnchantmentNBTTag(heldItem);
         if (tag == null)
             return;
@@ -517,10 +579,10 @@ public class LivingEnchantment {
 
     @SubscribeEvent
     public static void breakSpeedEvent(PlayerEvent.BreakSpeed event) {
-        if (Config.COMMON.checkCanHarvest.get() && !event.getEntityPlayer().canHarvestBlock(event.getState()))
+        ItemStack heldItem = event.getEntityPlayer().getHeldItemMainhand();
+        if (Config.COMMON.checkIsToolEffective.get() && !isToolEffective(heldItem, event.getState()))
             return;
-        ItemStack item = event.getEntityPlayer().getHeldItemMainhand();
-        NBTTagCompound tag = getEnchantmentNBTTag(item);
+        NBTTagCompound tag = getEnchantmentNBTTag(heldItem);
         if (tag == null)
             return;
         float multiplier = getToolEffectivenessModifier(tag);

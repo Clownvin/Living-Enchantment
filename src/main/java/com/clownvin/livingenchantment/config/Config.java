@@ -129,7 +129,7 @@ public class Config {
         public ForgeConfigSpec.BooleanValue xpShare;
         public ForgeConfigSpec.BooleanValue hoeNames;
         public ForgeConfigSpec.IntValue xpFunction;
-        public ForgeConfigSpec.BooleanValue checkCanHarvest;
+        public ForgeConfigSpec.BooleanValue checkIsToolEffective;
         //public ForgeConfigSpec.BooleanValue effectivenessAffectsAllBlocks;
 
         //---LOOT---//
@@ -204,10 +204,10 @@ public class Config {
                     .comment("Whether to give a custom name to generated hoes.\nThey're not sexual in nature, but some people might not like having their name considered a \"hoe\" name.")
                     .translation("text.config.hoe_names")
                     .define("hoe_names", true);
-            checkCanHarvest = builder
-                    .comment("Whether to check if player can harvest target block before increasing speed/dropping xp")
-                    .translation("text.config.check_can_harvest")
-                    .define("check_can_harvest", true);
+            checkIsToolEffective = builder
+                    .comment("Whether to check if player's tool is effective on target block before increasing speed/dropping xp")
+                    .translation("text.config.check_is_tool_effective")
+                    .define("check_is_tool_effective", true);
             xpFunction = builder
                     .comment("Change the whole underlying XP function.\nOptions: 0 = D&D (Original), 1 = Gen 1 (From Pokemon).\nBoth reach level 14 around the same XP count.\nGen 1 has a much steeper curve after 26, but starts out faster.")
                     .translation("text.config.xp_function")

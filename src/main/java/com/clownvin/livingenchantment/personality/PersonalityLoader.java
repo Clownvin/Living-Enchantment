@@ -1,6 +1,7 @@
 package com.clownvin.livingenchantment.personality;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class PersonalityLoader {
@@ -26,7 +27,7 @@ public class PersonalityLoader {
         File file = new File("./config/personalities/" + p.name + ".cfg");
         if (file.exists())
             return;
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             writer.write("[name]\n" + p.name + "\n[weight]\n" + p.weight + "\n[use]\n");
             for (int i = 0; i < p.onUse.length; i++) {
                 writer.write(p.onUse[i]);
@@ -585,7 +586,7 @@ public class PersonalityLoader {
         ArrayList<String> fivePercent = new ArrayList<>();
         String state = "none";
         String line = "";
-        try (BufferedReader reader = new BufferedReader(new FileReader(personalityLocation))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(personalityLocation), StandardCharsets.UTF_8))) {
             while ((line = reader.readLine()) != null) {
                 if (line.toLowerCase().startsWith("[name]")) {
                     state = "name";
