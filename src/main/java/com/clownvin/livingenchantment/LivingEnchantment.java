@@ -96,7 +96,7 @@ public class LivingEnchantment {
         if (result.target == null || result.target.toString().compareTo(Loader.instance().activeModContainer().getVersion().toString()) <= 0) {
             return;
         }
-        event.player.sendMessage(new TextComponentTranslation("text.new_update_notification", "Living Enchantment: "+result.target.toString()));
+        event.player.sendMessage(new TextComponentTranslation("text.new_update_notification", "livingenchantment-"+result.target.toString()));
     }
 
     public static int getWornLivingLevel(EntityLivingBase entity) {
