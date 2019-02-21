@@ -72,7 +72,6 @@ import java.util.concurrent.Callable;
 public class LivingEnchantment {
 
     public static final String MODID = "livingenchantment";
-    public static final String CURSEFORGE_PAGE = "https://minecraft.curseforge.com/projects/living-enchantment";
 
     private static final Logger LOGGER = LogManager.getLogger(LivingEnchantment.class);
 
@@ -94,8 +93,6 @@ public class LivingEnchantment {
         MinecraftForge.EVENT_BUS.register(this);
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> FMLJavaModLoadingContext.get().getModEventBus().addListener(RenderLivingXPOrb::registerRender)));
-        //FMLJavaModLoadingContext.get().getModEventBus().addListener(Personality);
-        //FMLJavaModLoadingContext.get().getModEventBus().addListener(LivingEnchantment::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(LivingEnchantment::postSetup);
         preinit();
     }
@@ -104,7 +101,6 @@ public class LivingEnchantment {
         EnchantmentLiving.LIVING_ENCHANTMENT = new EnchantmentLiving(Enchantment.Rarity.VERY_RARE, EnumEnchantmentType.ALL, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.FEET, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.LEGS});
         Personality.init();
         Config.init();
-        //RenderingRegistry.registerEntityRenderingHandler(EntityLivingXPOrb.class, RenderLivingXPOrb::new);
         LootFunctionManager.registerFunction(new EnchantLiving.Serializer());
         LootInjector.init();
         EntityLivingXPOrb.init();
@@ -112,20 +108,36 @@ public class LivingEnchantment {
             Config.createEnderIOEnchantRecipe();
             LOGGER.debug("Created EnderIO Enchantment recipe.");
         }
-        //LootTableList.
         LOGGER.debug("Finished "+MODID+" init...");
+    }
+
+    private static boolean isNewerVersion(String v1, String v2) {
+        String[] v1s = v1.split("\\.");
+        String[] v2s = v2.split("\\.");
+        if (v2s.length > v1s.length)
+            return true;
+        System.out.println(v2s.length+", "+v1s.length);
+        for (int i = 0; i < v2s.length; i++) {
+            if (v2s[i].length() > v1s[i].length()) {
+                return true;
+            }
+            if (v2s[i].compareTo(v1s[i]) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @SubscribeEvent
     public static void onJoinGame(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
         if (!Config.COMMON.showNewUpdateNotifications.get())
             return;
-        IModInfo info = ModList.get().getModContainerById(LivingEnchantment.MODID).get().getModInfo();
+        IModInfo info = ModList.get().getModContainerById(MODID).get().getModInfo();
         VersionChecker.CheckResult result = VersionChecker.getResult(info);
-        if (result.target == null || result.target.getCanonical().compareTo(info.getVersion().getQualifier()) <= 0) {
+        if (result.target == null || !isNewerVersion(info.getVersion().getQualifier(), result.target.getCanonical())) {//result.target.compareTo(Loader.instance().activeModContainer().getVersion()) <= 0) {
             return;
         }
-        event.getPlayer().sendMessage(new TextComponentTranslation("text.new_update_notification", "Living Enchantment: "+result.target.getCanonical()));
+        event.getPlayer().sendMessage(new TextComponentTranslation("text.new_update_notification", MODID+", "+MODID+"-"+result.target.toString()));
     }
 
     @SubscribeEvent
@@ -136,46 +148,12 @@ public class LivingEnchantment {
     @SubscribeEvent
     public static void dediServerStartingEvent(FMLDedicatedServerSetupEvent event) {
         registerCommands(event.getServerSupplier().get().getCommandManager().getDispatcher());
-        //registerReloadListeners(event.getServerSupplier().get().getResourceManager(), event.getServerSupplier().get().getLootTableManager());
     }
 
     @SubscribeEvent
     public static void serverStartingEvent(FMLServerStartingEvent event) {
         registerCommands(event.getCommandDispatcher());
-        //registerReloadListeners(event.getServer().getResourceManager(), event.getServer().getLootTableManager());
     }
-
-    /*
-    private static class Looter implements IResourceManagerReloadListener {
-        private LootTableManager lootTableManager;
-
-        private Looter(LootTableManager lootTableManager) {
-            this.lootTableManager = lootTableManager;
-        }
-
-        @Override
-        public void onResourceManagerReload(IResourceManager iResourceManager) {
-            System.out.println("Reloading resource manager");
-            if (Config.COMMON.chestLoot.get()) {
-                LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_END_CITY_TREASURE));
-                LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_DESERT_PYRAMID));
-                LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_JUNGLE_TEMPLE));
-                LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_IGLOO_CHEST));
-                LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_SIMPLE_DUNGEON));
-                LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_STRONGHOLD_LIBRARY));
-                LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_NETHER_BRIDGE));
-                LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_WOODLAND_MANSION));
-                //LootInjector.injectChestLoot(lootTableManager.getLootTableFromLocation(LootTableList.CHESTS_SPAWN_BONUS_CHEST));
-            }
-            if (Config.COMMON.fishingLoot.get()) {
-                LootInjector.injectFishingLoot(lootTableManager.getLootTableFromLocation(LootTableList.GAMEPLAY_FISHING));
-            }
-        }
-    }
-
-    private static void registerReloadListeners(IReloadableResourceManager manager, LootTableManager lootTableManager) {
-        manager.addReloadListener(new Looter(lootTableManager));
-    }*/
 
     private static void registerCommands(CommandDispatcher<CommandSource> dispatcher) {
         CommandAddItemXP.register(dispatcher);
@@ -186,9 +164,6 @@ public class LivingEnchantment {
         CommandSetItemXP.register(dispatcher);
         CommandSetPersonality.register(dispatcher);
         LOGGER.debug("Registered commands...");
-        //IResourceManagerReloadListener;
-        //Minecraft.getInstance().
-        //Minecraft.getInstance().getResourceManager().
     }
 
     public static int getWornLivingLevel(EntityLivingBase entity) {
@@ -327,7 +302,6 @@ public class LivingEnchantment {
         if (Config.COMMON.xpStyle.get() == 0)
             return;
         if (Config.COMMON.xpStyle.get() == 2) {
-            //DistExecutor.runWhenOn(Dist.CLIENT);
             player.getEntityWorld().spawnEntity(new EntityLivingXPOrb(player.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, exp));
         } else if (Config.COMMON.xpStyle.get() == 1) {
             if (Config.COMMON.xpShare.get())
