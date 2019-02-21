@@ -33,3 +33,4 @@ tooltip.damage_reduction=%s Damage Reduction
 tooltip.attack_damage=Attack Damage
 tooltip.lvl=Lvl: %s
 tooltip.exp=XP: %s
+text.new_update_notification=A new update is available for %s
