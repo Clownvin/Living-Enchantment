@@ -327,6 +327,7 @@ public class LivingEnchantment {
         if (Config.COMMON.xpStyle.get() == 0)
             return;
         if (Config.COMMON.xpStyle.get() == 2) {
+            //DistExecutor.runWhenOn(Dist.CLIENT);
             player.getEntityWorld().spawnEntity(new EntityLivingXPOrb(player.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, exp));
         } else if (Config.COMMON.xpStyle.get() == 1) {
             if (Config.COMMON.xpShare.get())
