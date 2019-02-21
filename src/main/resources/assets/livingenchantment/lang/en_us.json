@@ -34,5 +34,5 @@
   "tooltip.attack_damage": "Attack Damage",
   "tooltip.lvl": "Lvl: {0}",
   "tooltip.exp": "XP: {0}",
-  "text.new_update_notification": "A new update is available for {0}. You can download it at {1}."
+  "text.new_update_notification": "A new update is available for {0}."
 }

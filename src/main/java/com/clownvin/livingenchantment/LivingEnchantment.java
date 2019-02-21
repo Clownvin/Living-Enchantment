@@ -118,9 +118,10 @@ public class LivingEnchantment {
             return;
         IModInfo info = ModList.get().getModContainerById(LivingEnchantment.MODID).get().getModInfo();
         VersionChecker.CheckResult result = VersionChecker.getResult(info);
-        LOGGER.info(result.target.getCanonical().compareTo(info.getVersion().getQualifier()));
-        event.getPlayer().sendMessage(new TextComponentTranslation("text.new_update_notification", "Living Enchantment: "+result.target.getCanonical(), result.url));
-        //ForgeVersion
+        if (result.target == null || result.target.getCanonical().compareTo(info.getVersion().getQualifier()) <= 0) {
+            return;
+        }
+        event.getPlayer().sendMessage(new TextComponentTranslation("text.new_update_notification", "Living Enchantment: "+result.target.getCanonical()));
     }
 
     @SubscribeEvent
