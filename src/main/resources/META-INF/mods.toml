@@ -8,6 +8,7 @@ logoFile="logo.png"
     modId="livingenchantment"
     version="${file.jarVersion}"
     displayName="Living Enchantment"
+    updateJSONURL="https://raw.githubusercontent.com/Clownvin/UpdateJSONs/master/livingenchantment.json"
     credits="Clownvin"
     authors="Clownvin"
     description='''

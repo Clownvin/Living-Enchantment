@@ -139,9 +139,14 @@ public class Config {
         public ForgeConfigSpec.BooleanValue chestLoot;
         public ForgeConfigSpec.IntValue chestLootType;
         public ForgeConfigSpec.IntValue chestLootChance;
+        public ForgeConfigSpec.BooleanValue showNewUpdateNotifications;
 
         private Common(ForgeConfigSpec.Builder builder) {
             builder.push("General");
+            showNewUpdateNotifications = builder
+                    .comment("Changes whether or not the mod will alert you ingame to new updates for your version.")
+                    .translation("text.config.show_new_update_notifications")
+                    .define("show_new_update_notifications", true);
             levelExpModifier = builder
                     .comment("Changes how much XP is required for each level.\n0.005 is the min, and would be very fast leveling. 100 is the max, and would take forever to level.\nThe way this number is used is for scaling level xp amounts, as in this: actualXpToLevel = xpToLevel * levelXPModifier")
                     .translation("text.config.level_exp_modifier")

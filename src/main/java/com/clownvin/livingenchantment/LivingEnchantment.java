@@ -35,6 +35,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfig;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
@@ -45,11 +46,16 @@ import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.VersionChecker;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
+import net.minecraftforge.forgespi.language.IModInfo;
+import net.minecraftforge.versions.forge.ForgeVersion;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,6 +69,7 @@ import java.util.Map;
 public class LivingEnchantment {
 
     public static final String MODID = "livingenchantment";
+    public static final String CURSEFORGE_PAGE = "https://minecraft.curseforge.com/projects/living-enchantment";
 
     private static final Logger LOGGER = LogManager.getLogger(LivingEnchantment.class);
 
@@ -103,6 +110,17 @@ public class LivingEnchantment {
         }
         //LootTableList.
         LOGGER.debug("Finished "+MODID+" init...");
+    }
+
+    @SubscribeEvent
+    public static void onJoinGame(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
+        if (!Config.COMMON.showNewUpdateNotifications.get())
+            return;
+        IModInfo info = ModList.get().getModContainerById(LivingEnchantment.MODID).get().getModInfo();
+        VersionChecker.CheckResult result = VersionChecker.getResult(info);
+        LOGGER.info(result.target.getCanonical().compareTo(info.getVersion().getQualifier()));
+        event.getPlayer().sendMessage(new TextComponentTranslation("text.new_update_notification", "Living Enchantment: "+result.target.getCanonical(), result.url));
+        //ForgeVersion
     }
 
     @SubscribeEvent

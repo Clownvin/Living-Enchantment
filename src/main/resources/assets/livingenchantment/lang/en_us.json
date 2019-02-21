@@ -33,5 +33,6 @@
   //Attack Damage as it appears in your minecraft language
   "tooltip.attack_damage": "Attack Damage",
   "tooltip.lvl": "Lvl: {0}",
-  "tooltip.exp": "XP: {0}"
+  "tooltip.exp": "XP: {0}",
+  "text.new_update_notification": "A new update is available for {0}. You can download it at {1}."
 }
