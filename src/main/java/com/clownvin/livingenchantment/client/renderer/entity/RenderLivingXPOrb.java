@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class RenderLivingXPOrb extends Render<EntityLivingXPOrb> {
 
     private static final ResourceLocation EXPERIENCE_ORB_TEXTURES = new ResourceLocation("textures/entity/experience_orb.png");
@@ -30,7 +29,6 @@ public class RenderLivingXPOrb extends Render<EntityLivingXPOrb> {
         this.shadowOpaque = 0.75F;
     }
 
-    @SubscribeEvent
     public static void registerRender(FMLClientSetupEvent event) {
         RenderingRegistry.registerEntityRenderingHandler(EntityLivingXPOrb.class, RenderLivingXPOrb::new);
     }

@@ -325,4 +325,9 @@ public class EntityLivingXPOrb extends Entity {
     public boolean canBeAttackedWithItem() {
         return false;
     }
+
+    @Override
+    public EntityType<EntityLivingXPOrb> getType() {
+        return livingXPOrbType;
+    }
 }

@@ -1,5 +1,6 @@
 package com.clownvin.livingenchantment;
 
+import com.clownvin.livingenchantment.client.renderer.entity.RenderLivingXPOrb;
 import com.clownvin.livingenchantment.command.*;
 import com.clownvin.livingenchantment.config.Config;
 import com.clownvin.livingenchantment.enchantment.EnchantmentLiving;
@@ -46,6 +47,7 @@ import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.VersionChecker;
@@ -63,6 +65,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 @Mod(LivingEnchantment.MODID)
 @Mod.EventBusSubscriber(modid = LivingEnchantment.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -90,6 +93,7 @@ public class LivingEnchantment {
     public LivingEnchantment() {
         MinecraftForge.EVENT_BUS.register(this);
         FMLJavaModLoadingContext.get().getModEventBus().register(this);
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> FMLJavaModLoadingContext.get().getModEventBus().addListener(RenderLivingXPOrb::registerRender)));
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(Personality);
         //FMLJavaModLoadingContext.get().getModEventBus().addListener(LivingEnchantment::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(LivingEnchantment::postSetup);
@@ -280,9 +284,6 @@ public class LivingEnchantment {
 
     public static void talk(EntityPlayer player, ItemStack stack, String message, int minimumDialogueDelay) {
         NBTTagCompound tag = getEnchantmentNBTTag(stack);
-        if (!Config.CLIENT.showDialogue.get()) {
-            return;
-        }
         if (System.currentTimeMillis() - tag.getLong(LAST_TALK) < minimumDialogueDelay) {
             if (tag.getLong(LAST_TALK) > System.currentTimeMillis())
                 tag.setLong(LAST_TALK, System.currentTimeMillis());
@@ -326,7 +327,7 @@ public class LivingEnchantment {
         if (Config.COMMON.xpStyle.get() == 0)
             return;
         if (Config.COMMON.xpStyle.get() == 2) {
-            player.world.spawnEntity(new EntityLivingXPOrb(player.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, exp));
+            player.getEntityWorld().spawnEntity(new EntityLivingXPOrb(player.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, exp));
         } else if (Config.COMMON.xpStyle.get() == 1) {
             if (Config.COMMON.xpShare.get())
                 addExp(player, exp);
@@ -361,8 +362,10 @@ public class LivingEnchantment {
             return;
         }
         player.world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_LEVELUP, player.getSoundCategory(), 0.75F, 0.9F + (float) (Math.random() * 0.2F));
-        if (Config.CLIENT.showDialogue.get())
-            talk(player, stack, personality.getOnLevelUp(), 0);
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> {
+            if (Config.CLIENT.showDialogue.get())
+                talk(player, stack, personality.getOnLevelUp(), 0);
+        }));
     }
 
     public static void setExp(EntityPlayer player, ItemStack stack, NBTTagCompound tag, double exp) {
@@ -445,12 +448,14 @@ public class LivingEnchantment {
     public static void onLivingKilled(LivingDeathEvent event) {
         if (event.getEntityLiving().world.isRemote)
             return;
-        if (Config.CLIENT.showDialogue.get() && event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().getHeldItemMainhand().isEnchanted()) {
-            NBTTagCompound tag = getEnchantmentNBTTag(event.getEntityLiving().getHeldItemMainhand());
-            if (tag != null && Config.CLIENT.showDialogue.get()) {
-                talk((EntityPlayer) event.getEntityLiving(), event.getEntityLiving().getHeldItemMainhand(), Personality.getPersonality(tag).getOnDeath());
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> {
+            if (Config.CLIENT.showDialogue.get() && event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().getHeldItemMainhand().isEnchanted()) {
+                NBTTagCompound tag = getEnchantmentNBTTag(event.getEntityLiving().getHeldItemMainhand());
+                if (tag != null && Config.CLIENT.showDialogue.get()) {
+                    talk((EntityPlayer) event.getEntityLiving(), event.getEntityLiving().getHeldItemMainhand(), Personality.getPersonality(tag).getOnDeath());
+                }
             }
-        }
+        }));
         if (!(event.getSource().getTrueSource() instanceof EntityPlayer))
             return;
         EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
@@ -462,11 +467,11 @@ public class LivingEnchantment {
         if (tag != null)
             tag.setInt(KILL_COUNT, tag.getInt(KILL_COUNT) + 1);
         ItemStack item = EnchantmentHelper.getEnchantedItem(EnchantmentLiving.LIVING_ENCHANTMENT, player);
-        tag = getEnchantmentNBTTag(item);
+        NBTTagCompound talkingTag = getEnchantmentNBTTag(item);
         if (tag == null)
             return;
         doExpDrop(player, event.getEntityLiving().getPosition(), Config.getXPForLiving(event.getEntityLiving()));
-        doTalking(player, item, tag, event);
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> doTalking(player, item, talkingTag, event)));
     }
 
     @SubscribeEvent
@@ -477,7 +482,7 @@ public class LivingEnchantment {
             addBlockCount(event.getEntityLiving());
             if (event.getEntityLiving() instanceof EntityPlayer) {
                 ItemStack item = EnchantmentHelper.getEnchantedItem(EnchantmentLiving.LIVING_ENCHANTMENT, event.getEntityLiving());
-                doTalking((EntityPlayer) event.getEntityLiving(), item, getEnchantmentNBTTag(item), event);
+                DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> doTalking((EntityPlayer) event.getEntityLiving(), item, getEnchantmentNBTTag(item), event)));
             }
         }
         if (!(event.getSource().getTrueSource() instanceof EntityPlayer))
@@ -489,8 +494,7 @@ public class LivingEnchantment {
             return;
         float multiplier = getWeaponEffectivenessModifier(tag);
         event.setAmount(event.getAmount() * multiplier);
-        doTalking(player, weapon, tag, event);
-
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> doTalking(player, weapon, tag, event)));
     }
 
     //@SubscribeEvent
@@ -556,7 +560,7 @@ public class LivingEnchantment {
             return;
         tag.setInt(USAGE_COUNT, tag.getInt(USAGE_COUNT) + 1);
         doExpDrop(player, event.getContext().getPos(), 1);
-        doTalking(player, heldItem, tag, event);
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> doTalking(player, heldItem, tag, event)));
     }
 
     public static boolean isToolEffective(ItemStack stack, IBlockState state) {
@@ -593,7 +597,7 @@ public class LivingEnchantment {
             return;
         tag.setInt(USAGE_COUNT, tag.getInt(USAGE_COUNT) + 1);
         doExpDrop(player, event.getPos(), Config.getXPForBlock(player.world, event.getPos(), event.getState()));
-        doTalking(player, heldItem, tag, event);
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> doTalking(player, heldItem, tag, event)));
     }
 
     @SubscribeEvent
