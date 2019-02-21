@@ -29,6 +29,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.*;
@@ -46,15 +47,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.libraries.ModList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod(name = LivingEnchantment.NAME, modid = LivingEnchantment.MODID, version = LivingEnchantment.VERSION)
+@Mod(name = LivingEnchantment.NAME, modid = LivingEnchantment.MODID, version = LivingEnchantment.VERSION, updateJSON = "https://raw.githubusercontent.com/Clownvin/Living-Enchantment/1.12.2/update.json")
 @Mod.EventBusSubscriber(modid = LivingEnchantment.MODID)
 public class LivingEnchantment {
     public static final String MODID = "livingenchantment";
-    public static final String VERSION = "3.1.6";
+    public static final String VERSION = "3.1.9";
     public static final String NAME = "Living Enchantment";
 
     public static final String PERSONALITY_NAME = "personalityName";
@@ -84,6 +86,17 @@ public class LivingEnchantment {
         event.registerServerCommand(new CommandSetItemLevel());
         event.registerServerCommand(new CommandResetItem());
         event.registerServerCommand(new CommandSetPersonality());
+    }
+
+    @SubscribeEvent
+    public static void onJoinGame(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent event) {
+        if (!LivingConfig.general.showUpdateNotifications)
+            return;
+        ForgeVersion.CheckResult result = ForgeVersion.getResult(Loader.instance().activeModContainer());
+        if (result.target == null || result.target.toString().compareTo(Loader.instance().activeModContainer().getVersion().toString()) <= 0) {
+            return;
+        }
+        event.player.sendMessage(new TextComponentTranslation("text.new_update_notification", "Living Enchantment: "+result.target.toString()));
     }
 
     public static int getWornLivingLevel(EntityLivingBase entity) {

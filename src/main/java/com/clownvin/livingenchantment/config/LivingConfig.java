@@ -146,6 +146,9 @@ public class LivingConfig {
         @Config.Name("Effectiveness Affects All Blocks")
         @Config.Comment("Changes whether or not Effectiveness affects non-tool-effective blocks. (Ex. Pickaxe vs. Dirt would have increased speed)")
         public boolean effectivenessAffectsAllBlocks = false;
+        @Config.Name("Show Ingame Update Notifications")
+        @Config.Comment("Changes whether or not the mod will alert you ingame to new updates for your version.")
+        public boolean showUpdateNotifications = false;
     }
 
     public static class Loot {
