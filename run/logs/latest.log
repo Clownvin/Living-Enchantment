@@ -1,0 +1,107 @@
+[03Aug2019 15:06:52.513] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--gameDir, ., --launchTarget, fmluserdevclient, --fml.mcpVersion, 20190624.152911, --fml.mcVersion, 1.14.3, --fml.forgeGroup, net.minecraftforge, --fml.forgeVersion, 27.0.17, --version, MOD_DEV, --assetIndex, 1.14, --assetsDir, /home/clownvin/.gradle/caches/forge_gradle/assets, --username, Dev, --accessToken, ❄❄❄❄❄❄❄❄, --userProperties, {}]
+[03Aug2019 15:06:52.532] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher starting: java version 1.8.0_222 by Private Build
+[03Aug2019 15:06:53.541] [main/INFO] [net.minecraftforge.fml.loading.FixSSL/CORE]: Added Lets Encrypt root certificates as additional trust
+[03Aug2019 15:06:56.330] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'fmluserdevclient' with arguments [--version, MOD_DEV, --gameDir, ., --assetsDir, /home/clownvin/.gradle/caches/forge_gradle/assets, --assetIndex, 1.14, --username, Dev, --accessToken, ❄❄❄❄❄❄❄❄, --userProperties, {}]
+[03Aug2019 15:07:15.891] [Client thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Dev
+[03Aug2019 15:07:20.167] [Client thread/INFO] [net.minecraftforge.fml.ModLoader/CORE]: Loading Network data for FML net version: FML2
+[03Aug2019 15:08:03.283] [Client thread/INFO] [net.minecraft.client.Minecraft/]: LWJGL Version: 3.2.2 build 10
+[03Aug2019 15:08:10.987] [Client thread/FATAL] [net.minecraftforge.fml.ModLoader/CORE]: Failed to initialize mod containers
+net.minecraftforge.fml.ModLoadingException: Mod Loading Exception : fml.modloading.missingmetadata [null, CONSTRUCT, null, livingenchantment]
+	at net.minecraftforge.fml.ModLoader.lambda$buildModContainerFromTOML$24(ModLoader.java:207) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at java.util.Optional.orElseThrow(Optional.java:290) ~[?:1.8.0_222]
+	at net.minecraftforge.fml.ModLoader.buildModContainerFromTOML(ModLoader.java:207) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraftforge.fml.ModLoader.lambda$buildMods$23(ModLoader.java:190) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193) ~[?:1.8.0_222]
+	at java.util.HashMap$EntrySpliterator.forEachRemaining(HashMap.java:1699) ~[?:1.8.0_222]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:482) ~[?:1.8.0_222]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472) ~[?:1.8.0_222]
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708) ~[?:1.8.0_222]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:1.8.0_222]
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:566) ~[?:1.8.0_222]
+	at net.minecraftforge.fml.ModLoader.buildMods(ModLoader.java:190) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraftforge.fml.ModLoader.lambda$gatherAndInitializeMods$15(ModLoader.java:149) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193) ~[?:1.8.0_222]
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193) ~[?:1.8.0_222]
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1382) ~[?:1.8.0_222]
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:482) ~[?:1.8.0_222]
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472) ~[?:1.8.0_222]
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708) ~[?:1.8.0_222]
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:1.8.0_222]
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:566) ~[?:1.8.0_222]
+	at net.minecraftforge.fml.ModLoader.gatherAndInitializeMods(ModLoader.java:151) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraftforge.fml.client.ClientModLoader.lambda$begin$2(ClientModLoader.java:67) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraftforge.fml.client.ClientModLoader.lambda$createRunnableWithCatch$5(ClientModLoader.java:82) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraftforge.fml.client.ClientModLoader.begin(ClientModLoader.java:67) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:457) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:365) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraft.client.main.Main.main(Main.java:127) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_222]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_222]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_222]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_222]
+	at net.minecraftforge.userdev.FMLUserdevClientLaunchProvider.lambda$launchService$0(FMLUserdevClientLaunchProvider.java:55) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-2.1.5.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:50) [modlauncher-2.1.5.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:68) [modlauncher-2.1.5.jar:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:77) [modlauncher-2.1.5.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:62) [modlauncher-2.1.5.jar:?]
+	at net.minecraftforge.userdev.LaunchTesting.main(LaunchTesting.java:101) [forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+[03Aug2019 15:08:11.129] [Client thread/FATAL] [net.minecraftforge.eventbus.EventBus/EVENTBUS]: EventBus 0 shutting down - future events will not be posted.
+java.lang.Exception: stacktrace
+	at net.minecraftforge.eventbus.EventBus.shutdown(EventBus.java:278) ~[eventbus-0.10.2-service.jar:?]
+	at net.minecraftforge.fml.client.ClientModLoader.lambda$createRunnableWithCatch$5(ClientModLoader.java:84) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraftforge.fml.client.ClientModLoader.begin(ClientModLoader.java:67) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:457) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:365) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at net.minecraft.client.main.Main.main(Main.java:127) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_222]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_222]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_222]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_222]
+	at net.minecraftforge.userdev.FMLUserdevClientLaunchProvider.lambda$launchService$0(FMLUserdevClientLaunchProvider.java:55) ~[forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:37) [modlauncher-2.1.5.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:50) [modlauncher-2.1.5.jar:?]
+	at cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:68) [modlauncher-2.1.5.jar:?]
+	at cpw.mods.modlauncher.Launcher.run(Launcher.java:77) [modlauncher-2.1.5.jar:?]
+	at cpw.mods.modlauncher.Launcher.main(Launcher.java:62) [modlauncher-2.1.5.jar:?]
+	at net.minecraftforge.userdev.LaunchTesting.main(LaunchTesting.java:101) [forge-1.14.3-27.0.17_mapped_snapshot_20190621-1.14.2-recomp.jar:?]
+[03Aug2019 15:08:32.823] [Client thread/INFO] [com.mojang.text2speech.NarratorLinux/]: Narrator library successfully loaded
+[03Aug2019 15:08:34.294] [Client thread/INFO] [com.mojang.realmsclient.plugin.RealmsPluginImpl/]: Built for minecraft version 1.14.3
+[03Aug2019 15:08:37.363] [Realms Notification Availability checker #1/INFO] [realms.g/]: Could not authorize you against Realms server: Invalid session id
+[03Aug2019 15:10:30.035] [Server-Worker-1/ERROR] [net.minecraftforge.fml.ModLoader/LOADING]: Skipping lifecycle event SETUP, 1 errors found.
+[03Aug2019 15:10:30.047] [Server-Worker-1/FATAL] [net.minecraftforge.fml.ModLoader/LOADING]: Failed to complete lifecycle event SETUP, 1 errors found
+[03Aug2019 15:10:30.048] [Server-Worker-1/FATAL] [net.minecraftforge.eventbus.EventBus/EVENTBUS]: EventBus 0 shutting down - future events will not be posted.
+java.lang.Exception: stacktrace
+	at net.minecraftforge.eventbus.EventBus.shutdown(EventBus.java:278) ~[eventbus-0.10.2-service.jar:?]
+	at net.minecraftforge.fml.client.ClientModLoader.lambda$createRunnableWithCatch$5(ClientModLoader.java:84) ~[?:?]
+	at net.minecraftforge.fml.client.ClientModLoader.startModLoading(ClientModLoader.java:92) ~[?:?]
+	at net.minecraftforge.fml.client.ClientModLoader.lambda$onreload$3(ClientModLoader.java:74) ~[?:?]
+	at net.minecraftforge.fml.client.ClientModLoader.lambda$createRunnableWithCatch$5(ClientModLoader.java:82) ~[?:?]
+	at java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1626) [?:1.8.0_222]
+	at java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1618) [?:1.8.0_222]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289) [?:1.8.0_222]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056) [?:1.8.0_222]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692) [?:1.8.0_222]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157) [?:1.8.0_222]
+[03Aug2019 15:11:09.471] [Server-Worker-5/ERROR] [net.minecraftforge.fml.ModLoader/LOADING]: Skipping lifecycle event ENQUEUE_IMC, 1 errors found.
+[03Aug2019 15:11:09.472] [Server-Worker-5/FATAL] [net.minecraftforge.fml.ModLoader/LOADING]: Failed to complete lifecycle event ENQUEUE_IMC, 1 errors found
+[03Aug2019 15:11:09.472] [Server-Worker-5/FATAL] [net.minecraftforge.eventbus.EventBus/EVENTBUS]: EventBus 0 shutting down - future events will not be posted.
+java.lang.Exception: stacktrace
+	at net.minecraftforge.eventbus.EventBus.shutdown(EventBus.java:278) ~[eventbus-0.10.2-service.jar:?]
+	at net.minecraftforge.fml.client.ClientModLoader.lambda$createRunnableWithCatch$5(ClientModLoader.java:84) ~[?:?]
+	at net.minecraftforge.fml.client.ClientModLoader.finishModLoading(ClientModLoader.java:105) ~[?:?]
+	at net.minecraftforge.fml.client.ClientModLoader.lambda$onreload$4(ClientModLoader.java:76) ~[?:?]
+	at java.util.concurrent.CompletableFuture.uniRun(CompletableFuture.java:705) [?:1.8.0_222]
+	at java.util.concurrent.CompletableFuture$UniRun.tryFire(CompletableFuture.java:687) [?:1.8.0_222]
+	at java.util.concurrent.CompletableFuture$Completion.exec(CompletableFuture.java:443) [?:1.8.0_222]
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289) [?:1.8.0_222]
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056) [?:1.8.0_222]
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692) [?:1.8.0_222]
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157) [?:1.8.0_222]
+[03Aug2019 15:11:10.477] [Client thread/INFO] [net.minecraft.client.audio.SoundSystem/]: OpenAL initialized.
+[03Aug2019 15:11:10.479] [Client thread/INFO] [net.minecraft.client.audio.SoundEngine/SOUNDS]: Sound engine started
+[03Aug2019 15:11:11.466] [Client thread/INFO] [net.minecraft.client.renderer.texture.AtlasTexture/]: Created: 512x512 textures-atlas
+[03Aug2019 15:11:14.713] [Client thread/INFO] [net.minecraft.client.renderer.texture.AtlasTexture/]: Created: 256x256 textures/particle-atlas
+[03Aug2019 15:11:14.726] [Client thread/INFO] [net.minecraft.client.renderer.texture.AtlasTexture/]: Created: 256x256 textures/painting-atlas
+[03Aug2019 15:11:14.728] [Client thread/INFO] [net.minecraft.client.renderer.texture.AtlasTexture/]: Created: 128x128 textures/mob_effect-atlas
+[03Aug2019 15:11:28.338] [Client thread/INFO] [net.minecraft.client.Minecraft/]: Stopping!

@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: 1.14.3
+Implementation-Version: 1.0
+Specification-Vendor: examplemodsareus
+Specification-Title: examplemod
+Implementation-Timestamp: 2019-07-01T12:23:07-0500
+Specification-Version: 1
+Implementation-Vendor: examplemodsareus
+
