@@ -1,0 +1,84 @@
+
+[General]
+	#Changes how much damage reduction you gain per level.  0.285 is the default.
+	#The default will reach 80% armor reduction around level 14.
+	#This number is then divided by 4, since you can wear 4 pieces of armor.
+	#Because of math, no matter what number you pick, you'll never exceed 100% damage reduction, except in very extreme circumstances.
+	#Range: 0.005 ~ 1000.0
+	armor_effectiveness_per_level = 0.285
+	#If true and not Mending-Style XP Handling, additional kill XP will scale with Mob HP.
+	#If false and not Vanilla XP style, kill XP will always be 1 * killXPMultiplier
+	dynamic_kill_xp = true
+	#Changes how much faster the tool mines/chops/digs per level. 0.032 (Roughly 3%) is the default.
+	#Range: 0.005 ~ 1000.0
+	tool_effectiveness_per_level = 0.032
+	#Determines how Living XP is gained.
+	#0 - Mending-Style: Living works like mending, absorbing XP Orbs
+	#1 - Original: Gain XP on breaking blocks with tools or killing mobs, 
+	#2 - Original with Orbs: Like original, but breaking blocks/killing drops XP orbs just for living enchantments.
+	#Range: 0 ~ 2
+	xp_style = 2
+	#Changes whether or not the mod will alert you ingame to new updates for your version.
+	show_new_update_notifications = true
+	#Changes how large the damage increase per level is.  0.032 (Roughly 3%) is the default.
+	#Range: 0.005 ~ 1000.0
+	weapon_effectiveness_per_level = 0.032
+	#If true, and not Mending-Style XP Handling, additional block break XP will scale with block hardness.
+	#If false and not Vanilla XP style, block break XP will always be 1 * blockXPMultiplier
+	dynamic_block_xp = true
+	#Whether to check if player's tool is effective on target block before increasing speed/dropping xp
+	check_is_tool_effective = true
+	#Changes how much XP each kill gives.
+	#Range: 0.0 ~ 1000.0
+	kill_xp_multiplier = 3.0
+	#Determines whether or not living items will share gained XP (or if it will all just go to one)
+	xp_share = false
+	#Controls the max level cap.
+	#Range: 0 ~ 1000000
+	max_level = 999
+	#Change the whole underlying XP function.
+	#Options: 0 = D&D (Original), 1 = Gen 1 (From Pokemon).
+	#Both reach level 14 around the same XP count.
+	#Gen 1 has a much steeper curve after 26, but starts out faster.
+	#Range: 0 ~ 1
+	xp_function = 0
+	#Changes how much XP block break gives.
+	#Range: 0.0 ~ 1000.0
+	block_xp_multiplier = 1.0
+	#Changes how much XP is required for each level.
+	#0.005 is the min, and would be very fast leveling. 100 is the max, and would take forever to level.
+	#The way this number is used is for scaling level xp amounts, as in this: actualXpToLevel = xpToLevel * levelXPModifier
+	#Range: 0.005 ~ 1000.0
+	level_exp_modifier = 1.0
+	#Whether or not you can enchant armor with Living.
+	allow_armor = true
+	#Whether to give a custom name to generated hoes.
+	#They're not sexual in nature, but some people might not like having their name considered a "hoe" name.
+	hoe_names = true
+	#Changes whether Living is incompatible with vanilla damage/efficiency/protection enchantments.
+	allow_forbidden_enchantments = false
+
+[Loot]
+	#Changes whether spawned chests (dungeons, blacksmith, etc) can spawn living enchantment loot.
+	#Requires world restart to take affect.
+	chest_loot = true
+	#Changes what type of loot is rewarded when fishing. 0 - Just random unique items, 1 - Uniques and enchanted books, 2 - Just enchanted books.
+	#Requires world restart to take affect.
+	#Range: 0 ~ 2
+	fishing_loot_type = 1
+	#Changes chance of getting living enchantment loot from fishing, 1 in [value]. Default is 1 in 1000.
+	#Requires world restart to take affect.
+	#Range: 1 ~ 100000000
+	fishing_loot_chance = 1000
+	#Changes chance of getting living enchantment loot from chests, 1 in [value]. Default is 1 in 9.
+	#Requires world restart to take affect.
+	#Range: 1 ~ 10000
+	chest_loot_chance = 9
+	#Changes whether fishing rewards living enchantment loot.
+	#Requires world restart to take affect.
+	fishing_loot = true
+	#Changes what type of loot can spawn in chests. 0 - Just random unique items, 1 - Uniques and enchanted books, 2 - Just enchanted books.
+	#Requires world restart to take affect.
+	#Range: 0 ~ 2
+	chest_loot_type = 1
+

@@ -11,6 +11,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.FloatNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
@@ -22,7 +23,7 @@ public class CommandSetPersonality {
         try {
             PlayerEntity player = source.asPlayer();
             ItemStack held = player.getHeldItemMainhand();
-            ListNBT tag = LivingEnchantment.getEnchantmentNBTTag(held);
+            CompoundNBT tag = LivingEnchantment.getEnchantmentNBTTag(held);
             if (tag == null) {
                 source.sendErrorMessage(new TranslationTextComponent("commands.livingenchantment.mainhand_item_not_living"));
                 return 2;
@@ -32,8 +33,8 @@ public class CommandSetPersonality {
                 source.sendErrorMessage(new TranslationTextComponent("commands.setpersonality.not_in_range", personality));
                 return 1;
             }
-            tag.set(LivingEnchantment.PERSONALITY, new FloatNBT(Personality.getValue(p)));
-            tag.set(LivingEnchantment.PERSONALITY_NAME, new StringNBT(p.name));
+            tag.putFloat(LivingEnchantment.PERSONALITY, Personality.getValue(p));
+            tag.putString(LivingEnchantment.PERSONALITY_NAME, p.name);
             source.sendFeedback(new TranslationTextComponent("commands.setpersonality.success", new Object[] {held.getDisplayName().getFormattedText(), p.name}), true);
         } catch (CommandSyntaxException e) {
             e.printStackTrace();

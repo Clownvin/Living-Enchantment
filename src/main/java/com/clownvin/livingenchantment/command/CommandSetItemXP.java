@@ -10,6 +10,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -23,7 +24,7 @@ public class CommandSetItemXP {
         try {
             PlayerEntity player = source.asPlayer();
             ItemStack held = player.getHeldItemMainhand();
-            ListNBT tag = LivingEnchantment.getEnchantmentNBTTag(held);
+            CompoundNBT tag = LivingEnchantment.getEnchantmentNBTTag(held);
             if (tag == null) {
                 source.sendErrorMessage(new TranslationTextComponent("commands.livingenchantment.mainhand_item_not_living"));
                 return 2;

@@ -3,6 +3,7 @@ package com.clownvin.livingenchantment.personality;
 import com.clownvin.livingenchantment.LivingEnchantment;
 import com.clownvin.util.Weighted;
 import com.clownvin.util.WeightedList;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.FloatNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
@@ -137,12 +138,12 @@ public class Personality extends ForgeRegistryEntry<Personality> implements Weig
         return weightedPersonalityList.get(personality);
     }
 
-    public static Personality getPersonality(ListNBT tag) {
+    public static Personality getPersonality(CompoundNBT tag) {
         float f = tag.getFloat(LivingEnchantment.PERSONALITY);
         while (f <= 0.0f || f > 1.0f) {
             f = (float) Math.random();
         }
-        tag.set(LivingEnchantment.PERSONALITY, new FloatNBT(f));
+        tag.putFloat(LivingEnchantment.PERSONALITY, f);
         return getPersonality(f);
     }
 

@@ -57,16 +57,16 @@ public class LivingEnchantment {
 
     private static final Logger LOGGER = LogManager.getLogger(LivingEnchantment.class);
 
-    public static final int ID = 0;
-    public static final int PERSONALITY_NAME = 1;
-    public static final int PERSONALITY = 2;
-    public static final int LEVEL = 3;
-    public static final int EFFECTIVENESS = 4;
-    public static final int XP = 5;
-    public static final int LAST_TALK = 6;
-    public static final int KILL_COUNT = 7;
-    public static final int HIT_COUNT = 8;
-    public static final int USAGE_COUNT = 9;
+    public static final String ID = "id";
+    public static final String PERSONALITY_NAME = "personality-name";
+    public static final String PERSONALITY = "personality";
+    public static final String LEVEL = "level";
+    public static final String EFFECTIVENESS = "effectiveness";
+    public static final String XP = "xp";
+    public static final String LAST_TALK = "last-talk";
+    public static final String KILL_COUNT = "kill-count";
+    public static final String HIT_COUNT = "hit-count";
+    public static final String USAGE_COUNT = "usage-count";
 
     public static final int JUST_UNIQUES = 0;
     public static final int JUST_BOOKS = 2;
@@ -152,7 +152,7 @@ public class LivingEnchantment {
         for (ItemStack stack : gear) {
             if (!(stack.getItem() instanceof ArmorItem))
                 continue;
-            ListNBT tag = getEnchantmentNBTTag(stack);
+            CompoundNBT tag = getEnchantmentNBTTag(stack);
             if (tag == null)
                 continue;
             cumulativeLivingLevel += tag.getInt(LEVEL);
@@ -165,10 +165,10 @@ public class LivingEnchantment {
         for (ItemStack stack : gear) {
             if (!(stack.getItem() instanceof ArmorItem))
                 continue;
-            ListNBT tag = getEnchantmentNBTTag(stack);
+            CompoundNBT tag = getEnchantmentNBTTag(stack);
             if (tag == null)
                 continue;
-            tag.set(HIT_COUNT, new IntNBT(tag.getInt(HIT_COUNT) + 1));
+            tag.putInt(HIT_COUNT, tag.getInt(HIT_COUNT) + 1);
         }
     }
 
@@ -184,11 +184,11 @@ public class LivingEnchantment {
         return ((9 * (lvl * lvl) - (4 * lvl)) * Config.COMMON.levelExpModifier.get());
     }
 
-    public static float getToolEffectivenessModifier(ListNBT tag) {
+    public static float getToolEffectivenessModifier(CompoundNBT tag) {
         return 1 + (float) (tag.getInt(LEVEL) * Config.COMMON.toolEffectivenessPerLevel.get());
     }
 
-    public static float getWeaponEffectivenessModifier(ListNBT tag) {
+    public static float getWeaponEffectivenessModifier(CompoundNBT tag) {
         return 1 + (float) (tag.getInt(LEVEL) * Config.COMMON.weaponEffectivenessPerLevel.get());
     }
 
@@ -196,10 +196,10 @@ public class LivingEnchantment {
         return 1 + (float) (level * Config.COMMON.armorEffectivenessPerLEvel.get() * scale);
     }
 
-    public static ListNBT getEnchantmentNBTTag(ItemStack stack) {
-        ListNBT tag = null;
+    public static CompoundNBT getEnchantmentNBTTag(ItemStack stack) {
+        CompoundNBT tag = null;
         for (INBT base : stack.getEnchantmentTagList()) {
-            ListNBT other = (ListNBT) base;
+            CompoundNBT other = (CompoundNBT) base;
             if (!other.getString(ID).equals(EnchantmentLiving.LIVING_ENCHANTMENT.getRegistryName().toString()))
                 continue;
             tag = other;
@@ -208,7 +208,7 @@ public class LivingEnchantment {
         return tag;
     }
 
-    public static void doTalking(PlayerEntity player, ItemStack item, ListNBT tag, Event reason) {
+    public static void doTalking(PlayerEntity player, ItemStack item, CompoundNBT tag, Event reason) {
         if (!Config.CLIENT.showDialogue.get())
             return;
         Personality personality = Personality.getPersonality(tag);
@@ -238,35 +238,35 @@ public class LivingEnchantment {
     }
 
     public static void talk(PlayerEntity player, ItemStack stack, String message, int minimumDialogueDelay) {
-        ListNBT tag = getEnchantmentNBTTag(stack);
+        CompoundNBT tag = getEnchantmentNBTTag(stack);
         if (System.currentTimeMillis() - tag.getDouble(LAST_TALK) < minimumDialogueDelay) {
             if (tag.getDouble(LAST_TALK) > System.currentTimeMillis())
-                tag.set(LAST_TALK, new DoubleNBT(System.currentTimeMillis()));
+                tag.putLong(LAST_TALK, System.currentTimeMillis());
             return;
         }
-        tag.set(LAST_TALK, new DoubleNBT(System.currentTimeMillis()));
+        tag.putLong(LAST_TALK, System.currentTimeMillis());
         float durability = (1.0f - (stack.getDamage() / (float) stack.getMaxDamage())) * 100.0f;
         message = message.replace("$user", player.getName().getFormattedText()).replace("$level", "" + tag.getInt(LEVEL)).replace("$durability", String.format("%.1f", durability) + "%");
         player.sendMessage(new TranslationTextComponent(stack.getDisplayName().getFormattedText() + ": " + message));
     }
 
-    public static boolean isMaxLevel(ListNBT tag) {
+    public static boolean isMaxLevel(CompoundNBT tag) {
         return tag.getInt(LEVEL) == Config.COMMON.maxLevel.get() && xpToLvl(tag.getDouble(XP)) >= Config.COMMON.maxLevel.get();
     }
 
     public static void resetItem(ItemStack item) {
-        ListNBT tag = getEnchantmentNBTTag(item);
+        CompoundNBT tag = getEnchantmentNBTTag(item);
         if (tag == null) {
             return; // It's not enchanted..
         }
-        tag.set(XP, new DoubleNBT(0.0));
-        tag.set(LEVEL, new IntNBT(0));
-        tag.set(EFFECTIVENESS, new FloatNBT(getWeaponEffectivenessModifier(tag)));
-        tag.set(PERSONALITY, new FloatNBT(0));
-        tag.set(PERSONALITY_NAME, new StringNBT("???"));
-        tag.set(KILL_COUNT, new IntNBT(0));
-        tag.set(HIT_COUNT, new IntNBT(0));
-        tag.set(USAGE_COUNT, new IntNBT(0));
+        tag.putDouble(XP, 0.0f);
+        tag.putInt(LEVEL, 0);
+        tag.putFloat(EFFECTIVENESS, getWeaponEffectivenessModifier(tag));
+        tag.putFloat(PERSONALITY, 0);
+        tag.putString(PERSONALITY_NAME, "???");
+        tag.putInt(KILL_COUNT, 0);
+        tag.putInt(HIT_COUNT, 0);
+        tag.putInt(USAGE_COUNT, 0);
     }
 
     public static List<ItemStack> getAllEquipedLivingItems(PlayerEntity player) {
@@ -304,18 +304,18 @@ public class LivingEnchantment {
         items.forEach(item -> addExp(player, item, getEnchantmentNBTTag(item), itemExp));
     }
 
-    public static void addExp(final PlayerEntity player, final ItemStack stack, final ListNBT tag, final double exp) {
+    public static void addExp(final PlayerEntity player, final ItemStack stack, final CompoundNBT tag, final double exp) {
         int currLevel = xpToLvl(tag.getDouble(XP));
-        tag.set(XP, new DoubleNBT(tag.getDouble(XP) + exp));
+        tag.putDouble(XP, tag.getDouble(XP) + exp);
         int newLevel = xpToLvl(tag.getDouble(XP));
         Personality personality = Personality.getPersonality(tag);
-        tag.set(PERSONALITY_NAME, new StringNBT(personality.name));
+        tag.putString(PERSONALITY_NAME, personality.name);
         if (Config.COMMON.maxLevel.get() <= newLevel) {
-            tag.set(LEVEL, new IntNBT(Config.COMMON.maxLevel.get()));
-            tag.set(EFFECTIVENESS, new DoubleNBT(getWeaponEffectivenessModifier(tag)));
+            tag.putInt(LEVEL, Config.COMMON.maxLevel.get());
+            tag.putFloat(EFFECTIVENESS, getWeaponEffectivenessModifier(tag));
         } else {
-            tag.set(LEVEL, new IntNBT(newLevel));
-            tag.set(EFFECTIVENESS, new DoubleNBT(getWeaponEffectivenessModifier(tag)));
+            tag.putInt(LEVEL, newLevel);
+            tag.putFloat(EFFECTIVENESS, getWeaponEffectivenessModifier(tag));
         }
         if (newLevel == currLevel) {
             return;
@@ -327,8 +327,8 @@ public class LivingEnchantment {
         }));
     }
 
-    public static void setExp(PlayerEntity player, ItemStack stack, ListNBT tag, double exp) {
-        tag.set(XP, new DoubleNBT(0));
+    public static void setExp(PlayerEntity player, ItemStack stack, CompoundNBT tag, double exp) {
+        tag.putDouble(XP, 0);
         addExp(player, stack, tag, exp);
     }
 
@@ -341,7 +341,7 @@ public class LivingEnchantment {
         ItemStack stack = getRandomLivingItem(event.getEntityPlayer());
         if (stack.isEmpty())
             return;
-        ListNBT tag = getEnchantmentNBTTag(stack);
+        CompoundNBT tag = getEnchantmentNBTTag(stack);
         if (LivingEnchantment.isMaxLevel(tag))
             return;
         int xp = event.getOrb().xpValue == 1 ? 1 : event.getOrb().xpValue / 2;
@@ -365,7 +365,7 @@ public class LivingEnchantment {
                 event.getToolTip().add(new TranslationTextComponent("tooltip.damage_reduction", String.format("%.1f", (1 - (1.0F / getArmorEffectivenessModifier(livingLevel, 0.25f))) * 100) + "%" + TextFormatting.BLUE));
             }
         }
-        ListNBT tag = getEnchantmentNBTTag(event.getItemStack());
+        CompoundNBT tag = getEnchantmentNBTTag(event.getItemStack());
         if (tag == null) {
             return;
         }
@@ -409,7 +409,7 @@ public class LivingEnchantment {
             return;
         DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> {
             if (Config.CLIENT.showDialogue.get() && event.getEntityLiving() instanceof PlayerEntity && event.getEntityLiving().getHeldItemMainhand().isEnchanted()) {
-                ListNBT tag = getEnchantmentNBTTag(event.getEntityLiving().getHeldItemMainhand());
+                CompoundNBT tag = getEnchantmentNBTTag(event.getEntityLiving().getHeldItemMainhand());
                 if (tag != null && Config.CLIENT.showDialogue.get()) {
                     talk((PlayerEntity) event.getEntityLiving(), event.getEntityLiving().getHeldItemMainhand(), Personality.getPersonality(tag).getOnDeath());
                 }
@@ -418,15 +418,15 @@ public class LivingEnchantment {
         if (!(event.getSource().getTrueSource() instanceof PlayerEntity))
             return;
         PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
-        ListNBT tag = null;
+        CompoundNBT tag = null;
         if (event.getSource().damageType.equals("arrow") && player.getHeldItemOffhand().getItem() instanceof BowItem)
             tag = getEnchantmentNBTTag(player.getHeldItemOffhand());
         if (tag == null)
             tag = getEnchantmentNBTTag(player.getHeldItemMainhand());
         if (tag != null)
-            tag.set(KILL_COUNT, new IntNBT(tag.getInt(KILL_COUNT) + 1));
+            tag.putInt(KILL_COUNT, tag.getInt(KILL_COUNT) + 1);
         ItemStack item = getRandomLivingItem(player);
-        ListNBT talkingTag = getEnchantmentNBTTag(item);
+        CompoundNBT talkingTag = getEnchantmentNBTTag(item);
         if (tag == null)
             return;
         doExpDrop(player, event.getEntityLiving().getPosition(), Config.getXPForLiving(event.getEntityLiving()));
@@ -448,7 +448,7 @@ public class LivingEnchantment {
             return;
         PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
         ItemStack weapon = player.getHeldItemMainhand();
-        ListNBT tag = getEnchantmentNBTTag(weapon);
+        CompoundNBT tag = getEnchantmentNBTTag(weapon);
         if (tag == null)
             return;
         float multiplier = getWeaponEffectivenessModifier(tag);
@@ -456,11 +456,11 @@ public class LivingEnchantment {
         DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> doTalking(player, weapon, tag, event)));
     }
 
-    //@SubscribeEvent
+    @SubscribeEvent
     public static void onAnvilUpdate(AnvilUpdateEvent event) {
         LOGGER.info("On Anvil Update!");
-        ListNBT inputTag = getEnchantmentNBTTag(event.getLeft());
-        //ListNBT tag = getEnchantmentNBTTag(event.get)
+        CompoundNBT inputTag = getEnchantmentNBTTag(event.getLeft());
+        //CompoundNBT tag = getEnchantmentNBTTag(event.get)
         LOGGER.info(inputTag);
         if (inputTag == null)
             return;
@@ -468,15 +468,15 @@ public class LivingEnchantment {
         LOGGER.info("Input:\n"+event.getLeft().getItem().getRegistryName()+"\n"+inputTag);
         //LOGGER.info("Output pre:\n"+event.getOutput().getItem().getRegistryName()+"\n"+outputTag);
         //Tuple<Tuple<Integer, Integer>, String> data = anvilUpdate(event.getLeft(), event.getRight(), output, event.getCost(), event.getMaterialCost(), event.getName());
-        ListNBT outputTag = getEnchantmentNBTTag(output);
-        outputTag.set(XP, inputTag.get(XP));
-        outputTag.set(LEVEL, new IntNBT(xpToLvl(outputTag.getDouble(XP))));
-        outputTag.set(EFFECTIVENESS, new FloatNBT(getWeaponEffectivenessModifier(outputTag)));
-        outputTag.set(PERSONALITY, inputTag.get(PERSONALITY));
-        outputTag.set(PERSONALITY_NAME, new StringNBT(Personality.getPersonality(inputTag).name));
-        outputTag.set(KILL_COUNT, inputTag.get(KILL_COUNT));
-        outputTag.set(HIT_COUNT, inputTag.get(HIT_COUNT));
-        outputTag.set(USAGE_COUNT, inputTag.get(USAGE_COUNT));
+        CompoundNBT outputTag = getEnchantmentNBTTag(output);
+        outputTag.putDouble(XP, inputTag.getDouble(XP));
+        outputTag.putInt(LEVEL, xpToLvl(outputTag.getDouble(XP)));
+        outputTag.putFloat(EFFECTIVENESS, getWeaponEffectivenessModifier(outputTag));
+        outputTag.putFloat(PERSONALITY, inputTag.getFloat(PERSONALITY));
+        outputTag.putString(PERSONALITY_NAME, Personality.getPersonality(inputTag).name);
+        outputTag.putInt(KILL_COUNT, inputTag.getInt(KILL_COUNT));
+        outputTag.putInt(HIT_COUNT, inputTag.getInt(HIT_COUNT));
+        outputTag.putInt(USAGE_COUNT, inputTag.getInt(USAGE_COUNT));
         //output.setDisplayName(new TextComponentString(data.getB()));
         LOGGER.info("Output:\n"+event.getOutput().getItem().getRegistryName()+"\n"+outputTag);
         event.setOutput(output);
@@ -487,20 +487,20 @@ public class LivingEnchantment {
     @SubscribeEvent
     public static void onAnvilRepair(AnvilRepairEvent event) {
         LOGGER.debug("On Anvil Repair!");
-        ListNBT outputTag = getEnchantmentNBTTag(event.getItemResult());
-        ListNBT inputTag = getEnchantmentNBTTag(event.getItemInput());
+        CompoundNBT outputTag = getEnchantmentNBTTag(event.getItemResult());
+        CompoundNBT inputTag = getEnchantmentNBTTag(event.getItemInput());
         if (outputTag == null || inputTag == null)
             return;
         LOGGER.debug("Input:\n"+event.getItemInput().getItem().getRegistryName()+"\n"+inputTag);
         LOGGER.debug("Output pre:\n"+event.getItemResult().getItem().getRegistryName()+"\n"+outputTag);
-        outputTag.set(XP, inputTag.get(XP));
-        outputTag.set(LEVEL, new IntNBT(xpToLvl(outputTag.getDouble(XP))));
-        outputTag.set(EFFECTIVENESS, new FloatNBT(getWeaponEffectivenessModifier(outputTag)));
-        outputTag.set(PERSONALITY, inputTag.get(PERSONALITY));
-        outputTag.set(PERSONALITY_NAME, new StringNBT(Personality.getPersonality(inputTag).name));
-        outputTag.set(KILL_COUNT, inputTag.get(KILL_COUNT));
-        outputTag.set(HIT_COUNT, inputTag.get(HIT_COUNT));
-        outputTag.set(USAGE_COUNT, inputTag.get(USAGE_COUNT));
+        outputTag.putDouble(XP, inputTag.getDouble(XP));
+        outputTag.putInt(LEVEL, xpToLvl(outputTag.getDouble(XP)));
+        outputTag.putFloat(EFFECTIVENESS, getWeaponEffectivenessModifier(outputTag));
+        outputTag.putFloat(PERSONALITY, inputTag.getFloat(PERSONALITY));
+        outputTag.putString(PERSONALITY_NAME, Personality.getPersonality(inputTag).name);
+        outputTag.putInt(KILL_COUNT, inputTag.getInt(KILL_COUNT));
+        outputTag.putInt(HIT_COUNT, inputTag.getInt(HIT_COUNT));
+        outputTag.putInt(USAGE_COUNT, inputTag.getInt(USAGE_COUNT));
         LOGGER.debug("Output post:\n"+event.getItemResult().getItem().getRegistryName()+"\n"+outputTag);
     }
 
@@ -511,13 +511,13 @@ public class LivingEnchantment {
             return;
         PlayerEntity player = event.getEntityPlayer();
         ItemStack heldItem = player.getHeldItemMainhand();
-        ListNBT tag = getEnchantmentNBTTag(heldItem);
+        CompoundNBT tag = getEnchantmentNBTTag(heldItem);
         if (tag == null)
             return;
         Block block = world.getBlockState(event.getContext().getPos()).getBlock();
         if (!(block instanceof GrassBlock) && block != Blocks.DIRT)
             return;
-        tag.set(USAGE_COUNT, new IntNBT(tag.getInt(USAGE_COUNT) + 1));
+        tag.putInt(USAGE_COUNT, tag.getInt(USAGE_COUNT) + 1);
         doExpDrop(player, event.getContext().getPos(), 1);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> doTalking(player, heldItem, tag, event)));
     }
@@ -551,10 +551,10 @@ public class LivingEnchantment {
         ItemStack heldItem = player.getHeldItemMainhand();
         if (event.getState().getBlockHardness(event.getWorld(), event.getPos()) <= 0 || (Config.COMMON.checkIsToolEffective.get() && !isToolEffective(heldItem, event.getState())))
             return;
-        ListNBT tag = getEnchantmentNBTTag(heldItem);
+        CompoundNBT tag = getEnchantmentNBTTag(heldItem);
         if (tag == null)
             return;
-        tag.set(USAGE_COUNT, new IntNBT(tag.getInt(USAGE_COUNT) + 1));
+        tag.putInt(USAGE_COUNT, tag.getInt(USAGE_COUNT) + 1);
         doExpDrop(player, event.getPos(), Config.getXPForBlock(player.world, event.getPos(), event.getState()));
         DistExecutor.runWhenOn(Dist.CLIENT, () -> (() -> doTalking(player, heldItem, tag, event)));
     }
@@ -564,7 +564,7 @@ public class LivingEnchantment {
         ItemStack heldItem = event.getEntityPlayer().getHeldItemMainhand();
         if (Config.COMMON.checkIsToolEffective.get() && !isToolEffective(heldItem, event.getState()))
             return;
-        ListNBT tag = getEnchantmentNBTTag(heldItem);
+        CompoundNBT tag = getEnchantmentNBTTag(heldItem);
         if (tag == null)
             return;
         float multiplier = getToolEffectivenessModifier(tag);

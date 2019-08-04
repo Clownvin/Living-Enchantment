@@ -1,0 +1,210 @@
+{
+  "pools": [
+    {
+      "name": "unique_armor_loot",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:leather_helmet",
+          "weight": 7,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:leather_chestplate",
+          "weight": 7,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:leather_leggings",
+          "weight": 7,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:leather_boots",
+          "weight": 7,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:chainmail_helmet",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:chainmail_chestplate",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:chainmail_leggings",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:chainmail_boots",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_helmet",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_chestplate",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_leggings",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_boots",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:golden_helmet",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:golden_chestplate",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:golden_leggings",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:golden_boots",
+          "weight": 4,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:diamond_helmet",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:diamond_chestplate",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:diamond_leggings",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:diamond_boots",
+          "weight": 3,
+          "functions": [
+            {
+              "function": "livingenchantment:make_living_loot"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

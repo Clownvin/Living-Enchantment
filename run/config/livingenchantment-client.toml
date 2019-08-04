@@ -1,0 +1,13 @@
+
+[General]
+	#Changes how loud the XP added by this mod is.
+	#Range: 0.0 ~ 2.0
+	xp_volume = 0.15
+	#Changes whether or not living items will talk to you. On by default.
+	show_dialogue = true
+	#Changes the minimum delay between (in Milliseconds) times the item will talk
+	#Range: 0 ~ 1000000
+	minimum_dialogue_delay = 9000
+	#Changes whether personalities show up in tooltip.
+	show_personalities = true
+
