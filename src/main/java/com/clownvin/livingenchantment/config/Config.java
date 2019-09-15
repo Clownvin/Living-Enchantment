@@ -130,19 +130,23 @@ public class Config {
         public ForgeConfigSpec.BooleanValue hoeNames;
         public ForgeConfigSpec.IntValue xpFunction;
         public ForgeConfigSpec.BooleanValue checkIsToolEffective;
+        public ForgeConfigSpec.BooleanValue debugMode;
         //public ForgeConfigSpec.BooleanValue effectivenessAffectsAllBlocks;
 
         //---LOOT---//
         public ForgeConfigSpec.BooleanValue fishingLoot;
-        public ForgeConfigSpec.IntValue fishingLootType;
         public ForgeConfigSpec.IntValue fishingLootChance;
         public ForgeConfigSpec.BooleanValue chestLoot;
-        public ForgeConfigSpec.IntValue chestLootType;
+        public ForgeConfigSpec.IntValue chestLootRolls;
         public ForgeConfigSpec.IntValue chestLootChance;
         public ForgeConfigSpec.BooleanValue showNewUpdateNotifications;
 
         private Common(ForgeConfigSpec.Builder builder) {
             builder.push("General");
+            debugMode = builder
+                    .comment("Sets debug to true, enabling console logging for the mod.")
+                    .translation("text.config.debug_mode")
+                    .define("debug_mode", false);
             showNewUpdateNotifications = builder
                     .comment("Changes whether or not the mod will alert you ingame to new updates for your version.")
                     .translation("text.config.show_new_update_notifications")
@@ -194,9 +198,9 @@ public class Config {
                     .translation("text.config.max_level")
                     .defineInRange("max_level", 999, 0, 1000000);
             xpStyle = builder
-                    .comment("Determines how Living XP is gained.\n0 - Mending-Style: Living works like mending, absorbing XP Orbs\n1 - Original: Gain XP on breaking blocks with tools or killing mobs, \n2 - Original with Orbs: Like original, but breaking blocks/killing drops XP orbs just for living enchantments.")
+                    .comment("Determines how Living XP is gained.\n0 - Mending-Style: Living works like mending, absorbing XP Orbs\n1 - Original: Gain XP on breaking blocks with tools or killing mobs")
                     .translation("text.config.xp_style")
-                    .defineInRange("xp_style", 2, 0, 2);
+                    .defineInRange("xp_style", 1, 0, 1);
             allowArmor = builder
                     .comment("Whether or not you can enchant armor with Living.")
                     .translation("text.config.allow_armor")
@@ -220,29 +224,25 @@ public class Config {
             builder.pop();
             builder.push("Loot");
             fishingLoot = builder
-                    .comment("Changes whether fishing rewards living enchantment loot.\nRequires world restart to take affect.")
+                    .comment("Changes whether fishing rewards living enchantment loot.\nRequires world restart to take effect.")
                     .translation("text.config.fishing_loot")
                     .define("fishing_loot", true);
-            fishingLootType = builder
-                    .comment("Changes what type of loot is rewarded when fishing. 0 - Just random unique items, 1 - Uniques and enchanted books, 2 - Just enchanted books.\nRequires world restart to take affect.")
-                    .translation("text.config.fishing_loot_type")
-                    .defineInRange("fishing_loot_type", 1, 0, 2);
             fishingLootChance = builder
-                    .comment("Changes chance of getting living enchantment loot from fishing, 1 in [value]. Default is 1 in 1000.\nRequires world restart to take affect.")
+                    .comment("Changes chance of getting living enchantment loot from fishing, 1 in [value]. Default is 1 in 1000.\nRequires world restart to take effect.")
                     .translation("text.config.fishing_loot_chance")
                     .defineInRange("fishing_loot_chance", 1000, 1, 100000000);
             chestLoot = builder
-                    .comment("Changes whether spawned chests (dungeons, blacksmith, etc) can spawn living enchantment loot.\nRequires world restart to take affect.")
+                    .comment("Changes whether spawned chests (dungeons, blacksmith, etc) can spawn living enchantment loot.\nRequires world restart to take effect.")
                     .translation("text.config.chest_loot")
                     .define("chest_loot", true);
-            chestLootType = builder
-                    .comment("Changes what type of loot can spawn in chests. 0 - Just random unique items, 1 - Uniques and enchanted books, 2 - Just enchanted books.\nRequires world restart to take affect.")
-                    .translation("text.config.chest_loot_type")
-                    .defineInRange("chest_loot_type", 1, 0, 2);
             chestLootChance = builder
-                    .comment("Changes chance of getting living enchantment loot from chests, 1 in [value]. Default is 1 in 9.\nRequires world restart to take affect.")
+                    .comment("Changes chance of getting living enchantment loot from chests, 1 in [value]. Default is 1 in 15.\nRequires world restart to take effect.")
                     .translation("text.config.chest_loot_chance")
-                    .defineInRange("chest_loot_chance", 9, 1, 10000);
+                    .defineInRange("chest_loot_chance", 15, 1, 10000);
+            chestLootRolls = builder
+                    .comment("Amount of rolls for living loot in chests. Default is 1.\nRequires world restart to take effect.")
+                    .translation("text.config.chest_loot_rolls")
+                    .defineInRange("chest_loot_rolls", 1, 1, 10);
             builder.pop();
             //TODO See about adding config for every personality?
             //effectivenessAffectsAllBlocks = false;

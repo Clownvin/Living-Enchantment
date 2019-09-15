@@ -4,6 +4,8 @@ import com.clownvin.livingenchantment.command.*;
 import com.clownvin.livingenchantment.config.Config;
 import com.clownvin.livingenchantment.enchantment.EnchantmentLiving;
 import com.clownvin.livingenchantment.personality.Personality;
+import com.clownvin.livingenchantment.world.storage.loot.LootInjector;
+import com.clownvin.livingenchantment.world.storage.loot.functions.EnchantLiving;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -24,11 +26,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.AnvilUpdateEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.*;
@@ -68,8 +73,6 @@ public class LivingEnchantment {
     public static final String HIT_COUNT = "hit-count";
     public static final String USAGE_COUNT = "usage-count";
 
-    public static final int JUST_UNIQUES = 0;
-    public static final int JUST_BOOKS = 2;
     public static final int GEN1 = 1;
 
     public LivingEnchantment() {
@@ -84,6 +87,7 @@ public class LivingEnchantment {
             EquipmentSlotType.MAINHAND, EquipmentSlotType.OFFHAND, EquipmentSlotType.CHEST, EquipmentSlotType.FEET, EquipmentSlotType.HEAD, EquipmentSlotType.LEGS});
         Personality.init();
         Config.init();
+        LootFunctionManager.registerFunction(new EnchantLiving.Serializer());
         if (ModList.get().isLoaded("enderio")) {
             Config.createEnderIOEnchantRecipe();
             LOGGER.debug("Created EnderIO Enchantment recipe.");
@@ -122,16 +126,20 @@ public class LivingEnchantment {
 
     @SubscribeEvent
     public static void postSetup(FMLLoadCompleteEvent event) {
+        LOGGER.debug("Post setup");
         Personality.fillWeightedList();
+        LootInjector.init();
     }
 
     @SubscribeEvent
     public static void dediServerStartingEvent(FMLDedicatedServerSetupEvent event) {
+        LOGGER.debug("Dedi server setup event");
         registerCommands(event.getServerSupplier().get().getCommandManager().getDispatcher());
     }
 
     @SubscribeEvent
     public static void serverStartingEvent(FMLServerStartingEvent event) {
+        LOGGER.debug("Server starting event");
         registerCommands(event.getCommandDispatcher());
     }
 
@@ -162,14 +170,14 @@ public class LivingEnchantment {
 
     public static void addBlockCount(LivingEntity entity) {
         Iterable<ItemStack> gear = entity.getEquipmentAndArmor();
-        for (ItemStack stack : gear) {
-            if (!(stack.getItem() instanceof ArmorItem))
-                continue;
-            CompoundNBT tag = getEnchantmentNBTTag(stack);
+        gear.forEach(item -> {
+            if (!(item.getItem() instanceof ArmorItem))
+                return;
+            CompoundNBT tag = getEnchantmentNBTTag(item);
             if (tag == null)
-                continue;
+                return;
             tag.putInt(HIT_COUNT, tag.getInt(HIT_COUNT) + 1);
-        }
+        });
     }
 
     public static int xpToLvl(double xp) {
@@ -355,7 +363,6 @@ public class LivingEnchantment {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event) {
-        //System.out.println("Tooltip");
         if (event.getEntityPlayer() == null)
             return;
         if (event.getItemStack().getItem() instanceof ArmorItem) {

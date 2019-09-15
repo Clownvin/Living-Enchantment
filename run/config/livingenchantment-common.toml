@@ -9,15 +9,16 @@
 	#If true and not Mending-Style XP Handling, additional kill XP will scale with Mob HP.
 	#If false and not Vanilla XP style, kill XP will always be 1 * killXPMultiplier
 	dynamic_kill_xp = true
+	#Sets debug to true, enabling console logging for the mod.
+	debug_mode = false
 	#Changes how much faster the tool mines/chops/digs per level. 0.032 (Roughly 3%) is the default.
 	#Range: 0.005 ~ 1000.0
 	tool_effectiveness_per_level = 0.032
 	#Determines how Living XP is gained.
 	#0 - Mending-Style: Living works like mending, absorbing XP Orbs
-	#1 - Original: Gain XP on breaking blocks with tools or killing mobs, 
-	#2 - Original with Orbs: Like original, but breaking blocks/killing drops XP orbs just for living enchantments.
-	#Range: 0 ~ 2
-	xp_style = 2
+	#1 - Original: Gain XP on breaking blocks with tools or killing mobs
+	#Range: 0 ~ 1
+	xp_style = 1
 	#Changes whether or not the mod will alert you ingame to new updates for your version.
 	show_new_update_notifications = true
 	#Changes how large the damage increase per level is.  0.032 (Roughly 3%) is the default.
@@ -60,25 +61,21 @@
 
 [Loot]
 	#Changes whether spawned chests (dungeons, blacksmith, etc) can spawn living enchantment loot.
-	#Requires world restart to take affect.
+	#Requires world restart to take effect.
 	chest_loot = true
-	#Changes what type of loot is rewarded when fishing. 0 - Just random unique items, 1 - Uniques and enchanted books, 2 - Just enchanted books.
-	#Requires world restart to take affect.
-	#Range: 0 ~ 2
-	fishing_loot_type = 1
 	#Changes chance of getting living enchantment loot from fishing, 1 in [value]. Default is 1 in 1000.
-	#Requires world restart to take affect.
+	#Requires world restart to take effect.
 	#Range: 1 ~ 100000000
 	fishing_loot_chance = 1000
 	#Changes chance of getting living enchantment loot from chests, 1 in [value]. Default is 1 in 9.
-	#Requires world restart to take affect.
+	#Requires world restart to take effect.
 	#Range: 1 ~ 10000
 	chest_loot_chance = 9
 	#Changes whether fishing rewards living enchantment loot.
-	#Requires world restart to take affect.
+	#Requires world restart to take effect.
 	fishing_loot = true
-	#Changes what type of loot can spawn in chests. 0 - Just random unique items, 1 - Uniques and enchanted books, 2 - Just enchanted books.
-	#Requires world restart to take affect.
-	#Range: 0 ~ 2
-	chest_loot_type = 1
+	#Amount of rolls for living loot in chests. Default is 1.
+	#Requires world restart to take effect.
+	#Range: 1 ~ 10
+	chest_loot_rolls = 1
 
