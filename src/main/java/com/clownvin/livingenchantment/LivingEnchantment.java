@@ -30,6 +30,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.ForgeVersion;
+import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.*;
@@ -56,7 +57,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = LivingEnchantment.MODID)
 public class LivingEnchantment {
     public static final String MODID = "livingenchantment";
-    public static final String VERSION = "3.1.9";
+    public static final String VERSION = "3.2.0";
     public static final String NAME = "Living Enchantment";
 
     public static final String PERSONALITY_NAME = "personalityName";
@@ -191,7 +192,7 @@ public class LivingEnchantment {
         if (!LivingConfig.personalities.showDialogue)
             return;
         Personality personality = Personality.getPersonality(tag);
-        float damagePercent = item.getItemDamage() / (float) item.getMaxDamage();
+        float damagePercent = item.getMaxDamage() <= 0 || item.getMaxDamage() <= 0 ? 0 : item.getItemDamage() / (float) item.getMaxDamage();
         if (damagePercent >= 0.90f) {
             talk(player, item, personality.getFivePercent(), 3000);
         } else if (damagePercent >= 0.75f) {
@@ -452,6 +453,22 @@ public class LivingEnchantment {
     public static void onAnvilRepair(AnvilRepairEvent event) {
         NBTTagCompound outputTag = getEnchantmentNBTTag(event.getItemResult());
         NBTTagCompound inputTag = getEnchantmentNBTTag(event.getItemInput());
+        if (outputTag == null || inputTag == null)
+            return;
+        outputTag.setDouble(XP, inputTag.getDouble(XP));
+        outputTag.setInteger(LEVEL, xpToLvl(outputTag.getDouble(XP)));
+        outputTag.setFloat(EFFECTIVENESS, getWeaponEffectivenessModifier(outputTag));
+        outputTag.setFloat(PERSONALITY, inputTag.getFloat(PERSONALITY));
+        outputTag.setString(PERSONALITY_NAME, Personality.getPersonality(inputTag).name);
+        outputTag.setInteger(KILL_COUNT, inputTag.getInteger(KILL_COUNT));
+        outputTag.setInteger(HIT_COUNT, inputTag.getInteger(HIT_COUNT));
+        outputTag.setInteger(USAGE_COUNT, inputTag.getInteger(USAGE_COUNT));
+    }
+
+    @SubscribeEvent
+    public static void onAnvilUpdate(AnvilUpdateEvent event) {
+        NBTTagCompound outputTag = getEnchantmentNBTTag(event.getOutput());
+        NBTTagCompound inputTag = getEnchantmentNBTTag(event.getLeft());
         if (outputTag == null || inputTag == null)
             return;
         outputTag.setDouble(XP, inputTag.getDouble(XP));

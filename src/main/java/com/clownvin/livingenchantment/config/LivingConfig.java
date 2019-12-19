@@ -85,6 +85,9 @@ public class LivingConfig {
     }
 
     public static class General {
+//        @Config.Name("No Durability Loss (Only for Living)")
+//        @Config.Comment("Sets it so that Living items will not lose any durability from use.")
+//        public boolean noDurabilityLoss = false;
         @Config.Name("Level XP Modifier (Larger is Slower)")
         @Config.Comment("Changes how much XP is required for each level.\n0.05 is the min, and would be very fast leveling. 100 is the max, and would take forever to level.\nThe way this number is used is for scaling level xp amounts, as in this: actualXpToLevel = xpToLevel * levelXPModifier")
         @Config.RangeDouble(min = 0.05, max = 100.0)
