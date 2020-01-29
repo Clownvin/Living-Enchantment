@@ -57,7 +57,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = LivingEnchantment.MODID)
 public class LivingEnchantment {
     public static final String MODID = "livingenchantment";
-    public static final String VERSION = "3.2.0";
+    public static final String VERSION = "3.2.1";
     public static final String NAME = "Living Enchantment";
 
     public static final String PERSONALITY_NAME = "personalityName";
