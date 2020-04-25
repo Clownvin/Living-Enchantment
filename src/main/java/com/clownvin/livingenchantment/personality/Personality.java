@@ -126,7 +126,7 @@ public class Personality extends IForgeRegistryEntry.Impl<Personality> implement
     }
 
     private String getRandomPhrase(String[] phrases) {
-        return phrases[(int) (Math.random() * phrases.length)];
+        return phrases[(int) (Math.random() * (phrases.length - 1))];
     }
 
     public String getTwentyPercent() {
