@@ -126,7 +126,7 @@ public class Personality extends IForgeRegistryEntry.Impl<Personality> implement
     }
 
     private String getRandomPhrase(String[] phrases) {
-        return phrases[(int) (Math.random() * (phrases.length - 1))];
+        return phrases.length != 0 ? phrases[(int) (Math.random() * (phrases.length))] : "Herobrine says, 'Hi! Tell your modpack author about incomplete personality configs.'";
     }
 
     public String getTwentyPercent() {
