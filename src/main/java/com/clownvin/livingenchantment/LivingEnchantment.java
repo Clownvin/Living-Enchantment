@@ -57,7 +57,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = LivingEnchantment.MODID)
 public class LivingEnchantment {
     public static final String MODID = "livingenchantment";
-    public static final String VERSION = "3.2.2";
+    public static final String VERSION = "3.2.3";
     public static final String NAME = "Living Enchantment";
 
     public static final String PERSONALITY_NAME = "personalityName";
@@ -173,7 +173,7 @@ public class LivingEnchantment {
     }
 
     public static float getArmorEffectivenessModifier(int level) {
-        return 1 + (float) ((Math.log10(level / 7) * 2) * LivingConfig.general.armorEffectivenessPerLevel * 4);
+        return 1 + (float) ((Math.log10((level + 6) / 7.0d) * 2) * LivingConfig.general.armorEffectivenessPerLevel * 0.666);
     }
 
     public static NBTTagCompound getEnchantmentNBTTag(ItemStack stack) {
