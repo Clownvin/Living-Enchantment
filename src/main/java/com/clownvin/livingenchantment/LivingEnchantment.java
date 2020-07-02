@@ -193,23 +193,27 @@ public class LivingEnchantment {
             return;
         Personality personality = Personality.getPersonality(tag);
         float damagePercent = item.getMaxDamage() <= 0 || item.getMaxDamage() <= 0 ? 0 : item.getItemDamage() / (float) item.getMaxDamage();
-        if (damagePercent >= 0.90f) {
-            talk(player, item, personality.getFivePercent(), 3000);
-        } else if (damagePercent >= 0.75f) {
-            talk(player, item, personality.getTwentyPercent(), 3000);
-        }
-        if (reason instanceof LivingDeathEvent && Math.random() * personality.killOdds <= 1.0) {
-            if (((LivingDeathEvent) reason).getEntityLiving().equals(player))
-                talk(player, item, personality.getOnDeath());
-            else
-                talk(player, item, personality.getOnKill());
-        } else if ((reason instanceof BlockEvent.BreakEvent || reason instanceof UseHoeEvent) && Math.random() * personality.useOdds <= 1.0) {
-            talk(player, item, personality.getOnUse());
-        } else if (reason instanceof LivingHurtEvent && Math.random() * personality.hurtOdds <= 1.0) {
-            Entity source = ((LivingHurtEvent) reason).getSource().getTrueSource();
-            if (source != null && source.equals(player))
-                talk(player, item, personality.getOnTargetHurt());
-            //else send ouch message
+        try {
+            if (damagePercent >= 0.90f) {
+                talk(player, item, personality.getFivePercent(), 3000);
+            } else if (damagePercent >= 0.75f) {
+                talk(player, item, personality.getTwentyPercent(), 3000);
+            }
+            if (reason instanceof LivingDeathEvent && Math.random() * personality.killOdds <= 1.0) {
+                if (((LivingDeathEvent) reason).getEntityLiving().equals(player))
+                    talk(player, item, personality.getOnDeath());
+                else
+                    talk(player, item, personality.getOnKill());
+            } else if ((reason instanceof BlockEvent.BreakEvent || reason instanceof UseHoeEvent) && Math.random() * personality.useOdds <= 1.0) {
+                talk(player, item, personality.getOnUse());
+            } else if (reason instanceof LivingHurtEvent && Math.random() * personality.hurtOdds <= 1.0) {
+                Entity source = ((LivingHurtEvent) reason).getSource().getTrueSource();
+                if (source != null && source.equals(player))
+                    talk(player, item, personality.getOnTargetHurt());
+                //else send ouch message
+            }
+        } catch (RuntimeException e) {
+            talk(player, item, "Herobrine says: " + e.getMessage());
         }
     }
 
