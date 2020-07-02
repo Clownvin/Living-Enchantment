@@ -126,7 +126,13 @@ public class Personality extends IForgeRegistryEntry.Impl<Personality> implement
     }
 
     private String getRandomPhrase(String[] phrases) {
-        return phrases.length != 0 ? phrases[(int) (Math.random() * (phrases.length))] : "Herobrine says, 'Hi! Tell your modpack author about incomplete personality configs.'";
+        if (phrases == null) {
+            throw new RuntimeException("phrases does not exist");
+        }
+        if (phrases.length == 0) {
+            throw new RuntimeException("phrases length is 0");
+        }
+        return phrases[(int) (Math.random() * (phrases.length))];
     }
 
     public String getTwentyPercent() {
