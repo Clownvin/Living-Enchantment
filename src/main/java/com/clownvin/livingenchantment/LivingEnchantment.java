@@ -173,7 +173,7 @@ public class LivingEnchantment {
     }
 
     public static float getArmorEffectivenessModifier(int level, float scale) {
-        return 1 + (float) (level * LivingConfig.general.armorEffectivenessPerLEvel * scale);
+        return 1 + (float) (Math.log(level) * LivingConfig.general.armorEffectivenessPerLevel * scale);
     }
 
     public static NBTTagCompound getEnchantmentNBTTag(ItemStack stack) {

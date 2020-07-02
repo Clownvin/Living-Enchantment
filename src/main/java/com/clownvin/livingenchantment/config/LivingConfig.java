@@ -103,7 +103,7 @@ public class LivingConfig {
         @Config.Name("Effectiveness Per Level (Armor)")
         @Config.Comment("Changes how much damage reduction you gain per level.  " + DEFAULT_ARMOR_EFFECTIVENESS + " is the default.\nThe default will reach 80% armor reduction around level 14.\nThis number is then divided by 4, since you can wear 4 pieces of armor.\nBecause of math, no matter what number you pick, you'll never exceed 100% damage reduction, ever.")
         @Config.RangeDouble(min = 0.0, max = 10.0)
-        public double armorEffectivenessPerLEvel = DEFAULT_ARMOR_EFFECTIVENESS;
+        public double armorEffectivenessPerLevel = DEFAULT_ARMOR_EFFECTIVENESS;
         @Config.Name("XP Multiplier (Kill)")
         @Config.Comment("Changes how much XP each kill gives.")
         @Config.RangeDouble(min = 0.0, max = 300.0)
