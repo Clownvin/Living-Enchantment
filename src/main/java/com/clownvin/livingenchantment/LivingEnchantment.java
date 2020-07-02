@@ -57,7 +57,7 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = LivingEnchantment.MODID)
 public class LivingEnchantment {
     public static final String MODID = "livingenchantment";
-    public static final String VERSION = "3.2.1";
+    public static final String VERSION = "3.2.2";
     public static final String NAME = "Living Enchantment";
 
     public static final String PERSONALITY_NAME = "personalityName";
@@ -172,8 +172,8 @@ public class LivingEnchantment {
         return 1 + (float) (tag.getInteger(LEVEL) * LivingConfig.general.weaponEffectivenessPerLevel);
     }
 
-    public static float getArmorEffectivenessModifier(int level, float scale) {
-        return 1 + (float) (Math.log(level) * LivingConfig.general.armorEffectivenessPerLevel * scale);
+    public static float getArmorEffectivenessModifier(int level) {
+        return 1 + (float) ((Math.log10(level / 7) * 2) * LivingConfig.general.armorEffectivenessPerLevel * 4);
     }
 
     public static NBTTagCompound getEnchantmentNBTTag(ItemStack stack) {
@@ -346,7 +346,7 @@ public class LivingEnchantment {
             int livingLevel = getWornLivingLevel(event.getEntityPlayer());
             if (livingLevel != 0) {
                 event.getToolTip().add(new TextComponentTranslation("tooltip.currently_worn").getUnformattedText());
-                event.getToolTip().add(TextFormatting.BLUE + " " + new TextComponentTranslation("tooltip.damage_reduction", String.format("%.1f", (1 - (1.0F / getArmorEffectivenessModifier(livingLevel, 0.25f))) * 100) + "%" + TextFormatting.BLUE).getUnformattedText());
+                event.getToolTip().add(TextFormatting.BLUE + " " + new TextComponentTranslation("tooltip.damage_reduction", String.format("%.1f", (1 - (1.0F / getArmorEffectivenessModifier(livingLevel))) * 100) + "%" + TextFormatting.BLUE).getUnformattedText());
             }
         }
         NBTTagCompound tag = getEnchantmentNBTTag(event.getItemStack());
@@ -433,7 +433,7 @@ public class LivingEnchantment {
     public static void onLivingHurt(LivingHurtEvent event) {
         int targetLivingLevel = getWornLivingLevel(event.getEntityLiving());
         if (targetLivingLevel > 0) {
-            event.setAmount(event.getAmount() * (1.0F / getArmorEffectivenessModifier(targetLivingLevel, 0.25f)));
+            event.setAmount(event.getAmount() * (1.0F / getArmorEffectivenessModifier(targetLivingLevel)));
             addBlockCount(event.getEntityLiving());
             if (event.getEntityLiving() instanceof EntityPlayer) {
                 ItemStack item = EnchantmentHelper.getEnchantedItem(EnchantmentLiving.LIVING_ENCHANTMENT, event.getEntityLiving());
