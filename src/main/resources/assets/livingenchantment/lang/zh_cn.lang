@@ -1,0 +1,37 @@
+#Enchantment
+enchantment.living=生命
+#Enchantment Descriptions description
+enchantment.livingenchantment.enchantment.living.desc=让获得这个附魔的物品获得生命，让它在使用中变得更强！
+#Commands
+commands.livingenchantment.mainhand_item_not_living=你必须手持一个附有生命附魔的物品才能使用此命令！
+commands.livingenchantment.invalid_xp_number=经验值必须是个非负数，不过可以是小数。
+commands.additemxp.usage=/additemxp <经验值>
+commands.additemxp.success=给物品"%s"添加%f点经验值。
+commands.setitemxp.usage=/setitemxp <经验值>
+commands.setitemxp.success=将“%2$s”的经验值设为%1$s
+#11th line:Their orders are diffrent from the original. It may cause some problems, so I changed them/
+commands.setitemlevel.usage=/setitemlevel <等级>
+commands.setitemlevel.invalid_level_number=等级的值必须是非负整数，并且小于%s（最大等级）。
+commands.setitemlevel.success="%s" 现在的等级变成了%s。
+commands.resetitem.usage=/resetitem
+commands.resetitem.success="%s"被完全重置了。
+commands.setpersonality.usage=/setpersonality <个性>
+commands.setpersonality.not_in_range="%s" 是一个无法识别的个性。所指定的个性必须是大于0且小于等于1的数字，或是个性名称。
+commands.setpersonality.success=成功将"%s"的个性更改为 "%s".
+commands.setpersonality.listpersonalities=可用个性列表： %s
+#Other text
+tooltip.things_killed=已杀死%s个实体
+tooltip.blocks_pickaxed=已挖掘%s个方块
+tooltip.blocks_axed=已砍伐%s个方块
+tooltip.blocks_shoveled=已采集%s个方块
+tooltip.blocks_hoed=已锄%s个方块
+tooltip.blocks_tooled=已使用%s次
+tooltip.hits_taken=已抵挡%s次攻击
+tooltip.personality=个性： %s
+tooltip.currently_worn=正在穿着：
+tooltip.damage_reduction=已减免%s点伤害
+#Attack Damage as it appears in your minecraft language
+tooltip.attack_damage=攻击伤害
+tooltip.lvl=等级： %s
+tooltip.exp=经验值：%s
+text.new_update_notification=%s有一个可用的新升级！
